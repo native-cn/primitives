@@ -36,11 +36,6 @@ jobs:
         working-directory: apps/demo
         run: npx expo export --platform web
 
-      - name: Fix asset paths for subpath deployment
-        working-directory: apps/demo
-        run: |
-          find dist -name '*.html' -exec sed -i 's|href="/_expo/|href="./_expo/|g; s|src="/_expo/|src="./_expo/|g' {} +
-
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
