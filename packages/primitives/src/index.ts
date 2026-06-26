@@ -26,8 +26,7 @@ declare module "react-native" {
 }
 
 export { cn } from "./lib"
-export { useToast } from "./hooks"
-export { useMobile } from "./hooks/use-mobile"
+export { useToast, useTheme, useMobile } from "./hooks"
 export { Accordion, AccordionItem } from "./ui/accordion"
 export { Alert } from "./ui/alert"
 export { AlertDialog } from "./ui/alert-dialog"
