@@ -651,8 +651,6 @@ function CardsDemo() {
 /* ---------- Main Page ---------- */
 
 export default function HomeScreen() {
-  const { toggleColorScheme, colorScheme } = useTheme()
-
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScrollView className="flex-1">
