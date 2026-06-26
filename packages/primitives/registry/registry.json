@@ -395,10 +395,30 @@
       "files": [{ "path": "lib/utils.ts", "type": "registry:lib" }]
     },
     {
+      "name": "themes",
+      "type": "registry:style",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [{ "path": "themes/index.ts", "type": "registry:style" }]
+    },
+    {
+      "name": "theme-provider",
+      "type": "registry:ui",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [{ "path": "ui/theme-provider.tsx", "type": "registry:ui" }]
+    },
+    {
       "name": "use-mobile",
       "type": "registry:hook",
       "dependencies": ["react"],
       "files": [{ "path": "hooks/use-mobile.ts", "type": "registry:hook" }]
+    },
+    {
+      "name": "use-theme",
+      "type": "registry:hook",
+      "dependencies": ["react"],
+      "files": [{ "path": "hooks/use-theme.ts", "type": "registry:hook" }]
     },
     {
       "name": "use-toast",

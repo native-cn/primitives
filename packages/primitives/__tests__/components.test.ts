@@ -15,7 +15,7 @@ const expectedExports = [
   "RadioGroup", "Resizable", "ScrollArea", "Select", "Separator", "Sheet",
   "Sidebar", "Skeleton", "Slider", "Sonner", "Spinner", "Switch", "Table",
   "TableCell", "TableHead", "TableHeader", "TableRow", "Tabs", "Textarea",
-  "Toggle", "ToggleGroup", "Tooltip",
+  "themes", "themeColors", "ThemeProvider", "Toggle", "ToggleGroup", "Tooltip",
 ]
 
 describe("package exports", () => {

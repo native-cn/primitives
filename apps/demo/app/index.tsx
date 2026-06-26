@@ -20,6 +20,9 @@ import {
   Toggle,
   Tooltip,
   Combobox,
+  ThemeProvider,
+  useTheme,
+  themes,
 } from "@native-cn/primitives"
 
 export default function HomeScreen() {
@@ -31,6 +34,7 @@ export default function HomeScreen() {
   const [togglePressed, setTogglePressed] = useState(false)
   const [goal, setGoal] = useState(350)
   const [comboboxValue, setComboboxValue] = useState("")
+  const { theme, setTheme, colorScheme, toggleColorScheme } = useTheme()
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -57,6 +61,36 @@ export default function HomeScreen() {
               </Text>
             </Button>
           </View>
+        </View>
+
+        {/* Theme Switcher */}
+        <View className="px-4 pb-2">
+          <Card className="p-3">
+            <Text className="text-sm font-semibold text-card-foreground mb-2">Theme</Text>
+            <View className="flex-row flex-wrap gap-1.5">
+              {themes.map((t) => (
+                <Badge
+                  key={t.name}
+                  variant={theme === t.name ? "default" : "outline"}
+                >
+                  <Text
+                    onPress={() => setTheme(t.name)}
+                    className={theme === t.name ? "text-primary-foreground" : "text-foreground"}
+                  >
+                    {t.label}
+                  </Text>
+                </Badge>
+              ))}
+            </View>
+            <View className="flex-row items-center justify-between mt-2">
+              <Text className="text-xs text-muted-foreground">
+                {colorScheme === "dark" ? "🌙 Dark" : "☀️ Light"}
+              </Text>
+              <Button variant="outline" onPress={toggleColorScheme}>
+                <Text className="text-xs text-foreground">Toggle mode</Text>
+              </Button>
+            </View>
+          </Card>
         </View>
 
         <Separator />
