@@ -1,0 +1,1 @@
+{"version":3,"file":"input-otp.d.ts","sourceRoot":"","sources":["../../src/ui/input-otp.tsx"],"names":[],"mappings":"AAIA,UAAU,aAAa;IACrB,MAAM,CAAC,EAAE,MAAM,CAAA;IACf,KAAK,EAAE,MAAM,CAAA;IACb,aAAa,EAAE,CAAC,KAAK,EAAE,MAAM,KAAK,IAAI,CAAA;CACvC;AAED,wBAAgB,QAAQ,CAAC,EAAE,MAAU,EAAE,KAAK,EAAE,aAAa,EAAE,EAAE,aAAa,+BA2C3E"}

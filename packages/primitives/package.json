@@ -3,28 +3,37 @@
   "version": "0.1.0",
   "description": "shadcn/ui primitives for React Native — beautifully designed, accessible, and customizable.",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./dist-types/index.d.ts",
   "exports": {
-    ".": "./dist/index.js",
-    "./ui/*": "./dist/ui/*.js",
-    "./lib/*": "./dist/lib/*.js",
-    "./hooks/*": "./dist/hooks/*.js",
+    ".": {
+      "types": "./dist-types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./ui/*": {
+      "types": "./dist-types/ui/*.d.ts",
+      "default": "./src/ui/*.tsx"
+    },
+    "./lib/*": {
+      "types": "./dist-types/lib/*.d.ts",
+      "default": "./src/lib/*.ts"
+    },
     "./registry": "./registry/registry.json",
     "./tailwind": "./src/tailwind-preset.js",
     "./package.json": "./package.json"
   },
   "files": [
-    "dist/",
+    "src/",
+    "dist-types/",
     "registry/"
   ],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "dev": "tsc --noEmit -w",
+    "build": "tsc -p tsconfig.build.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist-types",
     "lint": "tsc --noEmit",
     "prepublishOnly": "pnpm build"
   },

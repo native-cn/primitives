@@ -5,6 +5,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "start": "cd apps/demo && npx expo start --clear",
+    "start:web": "cd apps/demo && npx expo start --web --clear",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean",
@@ -13,8 +15,9 @@
     "publish:primitives": "pnpm --filter @native-cn/primitives publish"
   },
   "devDependencies": {
-    "turbo": "^2.0.0",
+    "@rollup/rollup-win32-x64-msvc": "4.62.2",
     "prettier": "^3.2.0",
+    "turbo": "^2.0.0",
     "typescript": "^5.5.0"
   }
 }

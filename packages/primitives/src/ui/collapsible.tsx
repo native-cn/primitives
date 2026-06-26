@@ -1,65 +1,24 @@
-import { SymbolView } from 'expo-symbols';
-import { PropsWithChildren, useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
-import Animated, { FadeIn } from 'react-native-reanimated';
+import { PropsWithChildren, useState } from "react"
+import { Pressable, View, Text } from "react-native"
+import { cn } from "../lib/utils"
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
-
-export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const theme = useTheme();
+export function Collapsible({
+  children,
+  title,
+  className,
+}: PropsWithChildren & { title: string; className?: string }) {
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <ThemedView>
+    <View className={cn("rounded-lg border border-border", className)}>
       <Pressable
-        style={({ pressed }) => [styles.heading, pressed && styles.pressedHeading]}
-        onPress={() => setIsOpen((value) => !value)}>
-        <ThemedView type="backgroundElement" style={styles.button}>
-          <SymbolView
-            name={{ ios: 'chevron.right', android: 'chevron_right', web: 'chevron_right' }}
-            size={14}
-            weight="bold"
-            tintColor={theme.text}
-            style={{ transform: [{ rotate: isOpen ? '-90deg' : '90deg' }] }}
-          />
-        </ThemedView>
-
-        <ThemedText type="small">{title}</ThemedText>
+        onPress={() => setIsOpen(!isOpen)}
+        className="flex-row items-center justify-between px-4 py-3 active:bg-muted"
+      >
+        <Text className="text-sm font-medium text-foreground">{title}</Text>
+        <Text className="text-xs text-muted-foreground">{isOpen ? "▼" : "▶"}</Text>
       </Pressable>
-      {isOpen && (
-        <Animated.View entering={FadeIn.duration(200)}>
-          <ThemedView type="backgroundElement" style={styles.content}>
-            {children}
-          </ThemedView>
-        </Animated.View>
-      )}
-    </ThemedView>
-  );
+      {isOpen ? <View className="px-4 pb-3">{children}</View> : null}
+    </View>
+  )
 }
-
-const styles = StyleSheet.create({
-  heading: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  pressedHeading: {
-    opacity: 0.7,
-  },
-  button: {
-    width: Spacing.four,
-    height: Spacing.four,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  content: {
-    marginTop: Spacing.three,
-    borderRadius: Spacing.three,
-    marginLeft: Spacing.four,
-    padding: Spacing.four,
-  },
-});

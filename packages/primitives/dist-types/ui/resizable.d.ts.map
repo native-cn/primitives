@@ -1,0 +1,1 @@
+{"version":3,"file":"resizable.d.ts","sourceRoot":"","sources":["../../src/ui/resizable.tsx"],"names":[],"mappings":"AAGA,UAAU,cAAc;IACtB,QAAQ,EAAE,KAAK,CAAC,SAAS,CAAA;IACzB,SAAS,CAAC,EAAE,YAAY,GAAG,UAAU,CAAA;CACtC;AAED,wBAAgB,SAAS,CAAC,EAAE,QAAQ,EAAE,SAAwB,EAAE,EAAE,cAAc,+BAM/E"}
