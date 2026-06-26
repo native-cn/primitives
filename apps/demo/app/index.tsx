@@ -1,8 +1,7 @@
-import { useMemo } from "react"
 import { View, Text, ScrollView, Pressable } from "react-native"
 import { Link } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
-import Svg, { Rect, Path, Circle } from "react-native-svg"
+import Svg, { Rect, Path } from "react-native-svg"
 import {
   Button,
   Badge,
@@ -12,14 +11,11 @@ import {
   CardFooter,
   Input,
   Switch,
-  Tabs,
   Progress,
   Avatar,
   Separator,
-  Alert,
   Checkbox,
   Textarea,
-  useTheme,
 } from "@native-cn/primitives"
 
 /* ---------- Page Header Components ---------- */
