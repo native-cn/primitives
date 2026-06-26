@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "native-cn-demo",
+    "slug": "native-cn-demo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nativecn.demo"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.nativecn.demo"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
