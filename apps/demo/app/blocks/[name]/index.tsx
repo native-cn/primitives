@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Pressable } from "react-native"
 import { useLocalSearchParams, router } from "expo-router"
 import { useState } from "react"
 import { Button, Card, Badge, cn } from "@native-cn/primitives"
-import { blocks } from "../../components/block-registry"
+import { blocks } from "../../../components/block-registry"
 
 export default function BlockDetail() {
   const { name } = useLocalSearchParams<{ name: string }>()
