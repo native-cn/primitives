@@ -4,10 +4,12 @@ import { cn } from "../src/lib/utils"
 import { useToast } from "../src/hooks/use-toast"
 
 const expectedExports = [
-  "cn", "useToast", "useMobile", "useDirection", "DirectionProvider",
+  "cn", "useToast", "useTheme", "useMobile", "useDirection", "DirectionProvider",
   "Accordion", "AccordionItem", "Alert", "AlertDialog",
   "AspectRatio", "Avatar", "Badge", "Breadcrumb", "Button", "ButtonGroup",
-  "Calendar", "Card", "Carousel", "ChartContainer", "BarChart", "LineChart", "PieChart", "ChartLegend", "Checkbox", "Collapsible", "Combobox",
+  "Calendar", "Card", "CardHeader", "CardContent", "CardFooter", "Carousel",
+  "ChartContainer", "BarChart", "LineChart", "PieChart", "ChartLegend",
+  "Checkbox", "Collapsible", "Combobox",
   "Command", "ContextMenu", "Dialog", "DialogClose", "DialogFooter",
   "Drawer", "DrawerFooter", "DropdownMenu", "Empty", "Field", "FieldGroup",
   "Form", "HoverCard", "Input", "InputGroup", "InputOtp", "Item", "Kbd",
