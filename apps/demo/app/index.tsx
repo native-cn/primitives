@@ -1,7 +1,8 @@
-import { useState } from "react"
-import { View, Text, ScrollView } from "react-native"
+import { useMemo } from "react"
+import { View, Text, ScrollView, Pressable } from "react-native"
 import { Link } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
+import Svg, { Rect, Path, Circle } from "react-native-svg"
 import {
   Button,
   Badge,
@@ -15,506 +16,669 @@ import {
   Alert,
   Checkbox,
   Textarea,
-  Dialog,
-  DialogFooter,
-  DialogClose,
-  Toggle,
-  Tooltip,
-  Combobox,
-  ChartContainer,
-  BarChart,
-  LineChart,
-  PieChart,
-  ChartLegend,
-  ThemeProvider,
   useTheme,
-  themes,
 } from "@native-cn/primitives"
 
+/* ---------- Page Header Components ---------- */
+
+function Announcement() {
+  return (
+    <Badge variant="secondary" className="bg-muted">
+      <Link href="/docs/getting-started">
+        <Text className="text-xs font-medium text-foreground">
+          Get started with native-cn →
+        </Text>
+      </Link>
+    </Badge>
+  )
+}
+
+function PageHeader({ children }: { children: React.ReactNode }) {
+  return (
+    <View className="items-center gap-2 px-6 py-8 text-center md:py-16 lg:py-20">
+      {children}
+    </View>
+  )
+}
+
+function PageHeaderHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <Text className="leading-tighter max-w-3xl text-center text-3xl font-semibold tracking-tight text-primary lg:leading-[1.1] xl:text-5xl">
+      {children}
+    </Text>
+  )
+}
+
+function PageHeaderDescription({ children }: { children: React.ReactNode }) {
+  return (
+    <Text className="max-w-4xl text-center text-base text-balance text-foreground sm:text-lg">
+      {children}
+    </Text>
+  )
+}
+
+function PageActions({ children }: { children: React.ReactNode }) {
+  return (
+    <View className="flex-row items-center justify-center gap-2 pt-2">
+      {children}
+    </View>
+  )
+}
+
+/* ---------- Stroke Micro Chart (inline SVG) ---------- */
+
+function StrokeChart({ className }: { className?: string }) {
+  return (
+    <Svg
+      viewBox="0 0 100 86"
+      preserveAspectRatio="none"
+      className={className}
+      aria-label="Analytics trend"
+    >
+      <Path
+        d="M0 52L18 40L36 46L54 70L72 50L100 49V86H0Z"
+        fill="currentColor"
+        opacity="0.28"
+      />
+      <Path
+        d="M0 52L18 40L36 46L54 70L72 50L100 49"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        vectorEffect="non-scaling-stroke"
+      />
+    </Svg>
+  )
+}
+
+/* ---------- Mini bar chart (inline View) ---------- */
+
+function MiniBar({ data, color = "bg-chart-2" }: { data: { label: string; value: number }[]; color?: string }) {
+  const max = Math.max(...data.map((d) => d.value))
+  return (
+    <View className="flex-row items-end gap-1 h-8" role="img">
+      {data.map((d) => (
+        <View
+          key={d.label}
+          className={`flex-1 min-h-[3px] rounded-t-sm ${color}`}
+          style={{ height: `${(d.value / max) * 100}%` }}
+        />
+      ))}
+    </View>
+  )
+}
+
+function BarChartPreview({ data }: { data: { label: string; value: number }[] }) {
+  const max = Math.max(...data.map((d) => d.value))
+  return (
+    <View className="flex-row items-end gap-1.5" role="img" aria-label="Bar chart">
+      {data.map((d) => (
+        <View key={d.label} className="flex-1 items-center gap-1">
+          <View
+            className="w-full min-h-[6px] rounded-t-md bg-chart-2"
+            style={{ height: `${(d.value / max) * 80}%` }}
+          />
+          <Text className="text-[10px] text-muted-foreground">{d.label}</Text>
+        </View>
+      ))}
+    </View>
+  )
+}
+
+/* ---------- Card Components (matching shadcn/ui demo) ---------- */
+
+function UIElements() {
+  return (
+    <Card>
+      <CardContent className="flex-col gap-5 p-4">
+        <View className="flex-row gap-2">
+          <Button><Text className="text-xs text-primary-foreground">Button →</Text></Button>
+          <Button variant="secondary"><Text className="text-xs text-secondary-foreground">Secondary</Text></Button>
+          <Button variant="outline"><Text className="text-xs text-foreground">Outline</Text></Button>
+        </View>
+        <View className="gap-2">
+          <Input placeholder="Name" />
+          <Textarea placeholder="Message" />
+        </View>
+        <View className="flex-row items-center gap-2 flex-wrap">
+          <Badge>Badge</Badge>
+          <Badge variant="secondary">Secondary</Badge>
+          <Checkbox aria-label="Enable alerts" />
+          <Switch defaultChecked aria-label="Notifications" />
+        </View>
+        <View className="flex-row items-center gap-3">
+          <Button variant="outline"><Text className="text-xs text-foreground">Alert Dialog</Text></Button>
+          <Button variant="outline"><Text className="text-xs text-foreground">Button Group</Text></Button>
+        </View>
+      </CardContent>
+    </Card>
+  )
+}
+
+function SidebarNav() {
+  const sections = [
+    { label: "Overview", items: ["Analytics", "Transactions", "Investments", "Accounts", "Spending"] },
+    { label: "Planning", items: ["Documents", "Budget", "Reports", "Goals", "Calendar"] },
+  ]
+  return (
+    <View className="gap-3">
+      {sections.map((s) => (
+        <Card key={s.label}>
+          <CardContent className="p-3 gap-1">
+            <Text className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+              {s.label}
+            </Text>
+            {s.items.map((item) => (
+              <Text key={item} className="text-sm text-foreground py-0.5">
+                {item}
+              </Text>
+            ))}
+          </CardContent>
+        </Card>
+      ))}
+    </View>
+  )
+}
+
+function ContributionHistory() {
+  const data = [
+    { label: "Dec", value: 800 },
+    { label: "Jan", value: 1100 },
+    { label: "Feb", value: 900 },
+    { label: "Mar", value: 1300 },
+    { label: "Apr", value: 750 },
+    { label: "May", value: 1400 },
+  ]
+  return (
+    <Card>
+      <CardHeader>
+        <Text className="text-sm font-semibold text-card-foreground">Contribution History</Text>
+        <Text className="text-xs text-muted-foreground">Last 6 months of activity</Text>
+      </CardHeader>
+      <CardContent className="px-4">
+        <BarChartPreview data={data} />
+      </CardContent>
+      <CardContent className="px-4 pb-4">
+        <View className="flex-row gap-3">
+          <View className="flex-1 bg-muted rounded-lg p-3">
+            <Text className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Upcoming</Text>
+            <Text className="text-sm font-semibold text-foreground">May 2024</Text>
+            <Text className="text-xs text-muted-foreground">Scheduled</Text>
+          </View>
+          <View className="flex-1 bg-muted rounded-lg p-3">
+            <Text className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Savings Plan</Text>
+            <Text className="text-sm font-semibold text-foreground">Accelerated</Text>
+            <Text className="text-xs text-muted-foreground">Recurring</Text>
+          </View>
+        </View>
+      </CardContent>
+    </Card>
+  )
+}
+
+function ClaimableBalance() {
+  return (
+    <Card>
+      <CardHeader>
+        <Text className="text-xs text-muted-foreground">Claimable Balance</Text>
+        <Text className="text-3xl font-semibold tabular-nums text-card-foreground">$1,211.29</Text>
+        <Badge variant="outline">
+          <View className="size-1.5 rounded-full bg-yellow-500 mr-1" />
+          <Text className="text-xs">Pending Setup</Text>
+        </Badge>
+      </CardHeader>
+      <CardContent className="px-4 pb-4">
+        <View className="bg-muted rounded-lg p-3 gap-2">
+          <View className="flex-row justify-between">
+            <Text className="text-xs text-muted-foreground">Net Royalties</Text>
+            <Text className="text-xs font-medium tabular-nums text-foreground">$1,248.75</Text>
+          </View>
+          <View className="flex-row justify-between">
+            <Text className="text-xs text-muted-foreground">Processing Fee</Text>
+            <Text className="text-xs font-medium tabular-nums text-foreground">-$37.46</Text>
+          </View>
+          <Separator />
+          <View className="flex-row justify-between">
+            <Text className="text-xs text-muted-foreground">Total Ready to Claim</Text>
+            <Text className="text-xs font-semibold tabular-nums text-foreground">$1,211.29 USD</Text>
+          </View>
+        </View>
+      </CardContent>
+    </Card>
+  )
+}
+
+function DividendIncome() {
+  const holdings = [
+    { name: "Vanguard", shares: "450 Shares", amount: "$1,842.10" },
+    { name: "S&P 500 VOO", shares: "112 Shares", amount: "$928.40" },
+    { name: "Apple AAPL", shares: "85 Shares", amount: "$340.00" },
+    { name: "Realty Income", shares: "320 Shares", amount: "$1,139.50" },
+  ]
+  return (
+    <Card>
+      <CardHeader>
+        <Text className="text-sm font-semibold text-card-foreground">Q2 Dividend Income</Text>
+        <Text className="text-xs text-muted-foreground">Quarterly dividend payouts across your portfolio holdings.</Text>
+      </CardHeader>
+      <CardContent className="px-4 pb-4 gap-2">
+        {holdings.map((h) => (
+          <View key={h.name} className="flex-row items-center justify-between bg-muted rounded-lg p-3">
+            <View>
+              <Text className="text-sm font-medium text-foreground">{h.name}</Text>
+              <Text className="text-xs text-muted-foreground">{h.shares}</Text>
+            </View>
+            <Text className="text-sm font-semibold tabular-nums text-foreground">{h.amount}</Text>
+          </View>
+        ))}
+      </CardContent>
+    </Card>
+  )
+}
+
+function NewMilestone() {
+  return (
+    <Card>
+      <CardHeader>
+        <Text className="text-sm font-semibold text-card-foreground">Set a new milestone</Text>
+        <Text className="text-xs text-muted-foreground">Define your financial target and we'll help you pace your savings.</Text>
+      </CardHeader>
+      <CardContent className="px-4 gap-3">
+        <Input placeholder="Goal Name" defaultValue="e.g. New Car" />
+        <View className="flex-row gap-3">
+          <Input placeholder="Target Amount" className="flex-1" defaultValue="$15,000" />
+          <Input placeholder="Target Date" className="flex-1" defaultValue="Dec 2025" />
+        </View>
+      </CardContent>
+    </Card>
+  )
+}
+
+function PayoutThreshold() {
+  return (
+    <Card>
+      <CardHeader>
+        <Text className="text-sm font-semibold text-card-foreground">Payout Threshold</Text>
+        <Text className="text-xs text-muted-foreground">Set the minimum balance required before a payout is triggered.</Text>
+      </CardHeader>
+      <CardContent className="px-4 gap-4">
+        <View className="gap-2">
+          <Text className="text-xs text-muted-foreground">Minimum Payout Amount</Text>
+          <Text className="text-2xl font-semibold tabular-nums text-foreground">$2,500.00</Text>
+          <Progress value={25} />
+          <View className="flex-row justify-between">
+            <Text className="text-[10px] text-muted-foreground">$50 (MIN)</Text>
+            <Text className="text-[10px] text-muted-foreground">$10,000 (MAX)</Text>
+          </View>
+        </View>
+        <Textarea placeholder="Add any notes for this payout configuration..." />
+      </CardContent>
+    </Card>
+  )
+}
+
+function AccountAccess() {
+  return (
+    <Card>
+      <CardHeader>
+        <Text className="text-sm font-semibold text-card-foreground">Account Access</Text>
+        <Text className="text-xs text-muted-foreground">Update your credentials or re-authenticate.</Text>
+      </CardHeader>
+      <CardContent className="px-4 gap-3">
+        <View className="gap-1.5">
+          <Text className="text-xs text-foreground">Email Address</Text>
+          <Input placeholder="artist@studio.inc" />
+        </View>
+        <View className="gap-1.5">
+          <View className="flex-row justify-between">
+            <Text className="text-xs text-foreground">Current Password</Text>
+            <Text className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Forgot?</Text>
+          </View>
+          <Input placeholder="••••••••••••••••" />
+        </View>
+      </CardContent>
+    </Card>
+  )
+}
+
+function QrConnect() {
+  return (
+    <Card>
+      <CardContent className="items-center pt-6 pb-2">
+        <View className="rounded-xl border bg-white p-3">
+          {(() => {
+            const qrCells = [
+              "111111100101101111111",
+              "100000101001001000001",
+              "101110101111101011101",
+              "101110100100001011101",
+              "101110101010101011101",
+              "100000100111001000001",
+              "111111101010101111111",
+              "000000001101000000000",
+              "101011111001111010110",
+              "010100001110010101001",
+              "111010111011101111010",
+              "110001010100001010111",
+              "110101111101111010011",
+              "000000001001010001010",
+              "111111101101111101001",
+              "100000100010001001111",
+              "101110101011101110100",
+              "101110100110100010011",
+              "101110101000111101110",
+              "100000101101000011001",
+              "111111101011101101111",
+            ]
+            return (
+              <Svg viewBox="0 0 21 21" width={120} height={120} aria-label="QR code">
+                {qrCells.map((row, y) =>
+                  [...row].map((cell, x) =>
+                    cell === "1" ? (
+                      <Rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill="black" />
+                    ) : null
+                  )
+                )}
+              </Svg>
+            )
+          })()}
+        </View>
+      </CardContent>
+      <CardHeader className="items-center pb-4">
+        <Text className="text-sm font-semibold text-card-foreground text-center">Scan to connect your mobile device</Text>
+        <Text className="text-xs text-muted-foreground text-center text-balance">
+          Open the Ledger mobile app and scan this code to link your device.
+        </Text>
+      </CardHeader>
+    </Card>
+  )
+}
+
+function TransferFunds() {
+  return (
+    <Card>
+      <CardHeader>
+        <Text className="text-sm font-semibold text-card-foreground">Transfer Funds</Text>
+        <Text className="text-xs text-muted-foreground">Move money between your connected accounts.</Text>
+      </CardHeader>
+      <CardContent className="px-4 gap-3">
+        <View className="gap-1.5">
+          <Text className="text-xs text-foreground">Amount to Transfer</Text>
+          <Input defaultValue="$1,200.00" />
+        </View>
+        <View className="gap-1.5">
+          <Text className="text-xs text-foreground">From Account</Text>
+          <Input defaultValue="Main Checking (··8402)" />
+        </View>
+        <View className="gap-1.5">
+          <Text className="text-xs text-foreground">To Account</Text>
+          <Input defaultValue="High Yield Savings (··1192)" />
+        </View>
+        <View className="bg-muted rounded-lg p-3 gap-2">
+          <View className="flex-row justify-between">
+            <Text className="text-xs text-muted-foreground">Estimated arrival</Text>
+            <Text className="text-xs font-medium text-foreground">Today, Apr 14</Text>
+          </View>
+          <Separator />
+          <View className="flex-row justify-between">
+            <Text className="text-xs text-muted-foreground">Transaction fee</Text>
+            <Text className="text-xs font-medium tabular-nums text-foreground">$0.00</Text>
+          </View>
+          <Separator />
+          <View className="flex-row justify-between">
+            <Text className="text-xs font-medium text-foreground">Total amount</Text>
+            <Text className="text-xs font-semibold tabular-nums text-foreground">$1,200.00</Text>
+          </View>
+        </View>
+      </CardContent>
+    </Card>
+  )
+}
+
+function Payments() {
+  const items = [
+    { title: "Change transfer limit", desc: "Adjust how much you can send from your balance." },
+    { title: "Scheduled transfers", desc: "Set up a transfer to send at a later date." },
+    { title: "Recurring card payments", desc: "Manage your repeated card transactions." },
+  ]
+  return (
+    <Card>
+      <CardHeader>
+        <Text className="text-sm font-semibold text-card-foreground">Payments</Text>
+        <Text className="text-xs text-muted-foreground">Home / Payments</Text>
+      </CardHeader>
+      <CardContent className="px-4 pb-4 gap-2">
+        {items.map((item) => (
+          <View key={item.title} className="bg-muted rounded-lg p-3">
+            <Text className="text-sm font-medium text-foreground">{item.title}</Text>
+            <Text className="text-xs text-muted-foreground">{item.desc}</Text>
+          </View>
+        ))}
+      </CardContent>
+    </Card>
+  )
+}
+
+function NotificationSettings() {
+  const notifications = [
+    { id: "transactions", label: "Transaction alerts", desc: "Deposits, withdrawals, and transfers.", checked: true },
+    { id: "security", label: "Security alerts", desc: "Login attempts and account changes.", checked: true },
+    { id: "goals", label: "Goal milestones", desc: "Updates at 25%, 50%, 75%, and 100%.", checked: false },
+    { id: "market", label: "Market updates", desc: "Daily portfolio summary and price alerts.", checked: false },
+  ]
+  return (
+    <Card>
+      <CardHeader>
+        <Text className="text-sm font-semibold text-card-foreground">Notifications</Text>
+        <Text className="text-xs text-muted-foreground">Choose which email and push alerts you want to receive.</Text>
+      </CardHeader>
+      <CardContent className="px-4 pb-4 gap-3">
+        {notifications.map((n) => (
+          <View key={n.id} className="flex-row items-start gap-3">
+            <Checkbox id={n.id} defaultChecked={n.checked} aria-label={n.label} />
+            <View className="flex-1">
+              <Text className="text-sm text-foreground">{n.label}</Text>
+              <Text className="text-xs text-muted-foreground">{n.desc}</Text>
+            </View>
+          </View>
+        ))}
+      </CardContent>
+    </Card>
+  )
+}
+
+function PowerUsage() {
+  const data = [
+    { label: "6a", value: 1.2 },
+    { label: "8a", value: 2.8 },
+    { label: "10a", value: 3.1 },
+    { label: "12p", value: 2.4 },
+    { label: "2p", value: 3.4 },
+    { label: "4p", value: 2.9 },
+    { label: "6p", value: 3.8 },
+    { label: "8p", value: 3.2 },
+  ]
+  return (
+    <Card>
+      <CardHeader>
+        <Text className="text-sm font-semibold text-card-foreground">Power Usage</Text>
+        <Text className="text-xs text-muted-foreground">Whole Home</Text>
+      </CardHeader>
+      <CardContent className="px-4 gap-3">
+        <MiniBar data={data} />
+        <Separator />
+        <View className="flex-row justify-between">
+          <View>
+            <Text className="text-xs text-muted-foreground">Currently Using</Text>
+            <Text className="text-base font-semibold tabular-nums text-foreground">3.4 kW</Text>
+          </View>
+          <View>
+            <Text className="text-xs text-muted-foreground">Solar Gen</Text>
+            <Text className="text-base font-semibold tabular-nums text-foreground">+1.2 kW</Text>
+          </View>
+        </View>
+      </CardContent>
+    </Card>
+  )
+}
+
+function AnalyticsCard() {
+  return (
+    <Card className="pb-0">
+      <CardHeader>
+        <Text className="text-sm font-semibold text-card-foreground">Analytics</Text>
+        <View className="flex-row items-center gap-1.5">
+          <Text className="text-xs text-muted-foreground">418.2K Visitors</Text>
+          <Badge><Text className="text-[10px] text-primary-foreground">+10%</Text></Badge>
+        </View>
+      </CardHeader>
+      <View className="px-4 pb-4">
+        <View className="text-chart-1">
+          <StrokeChart className="w-full h-20" />
+        </View>
+      </View>
+    </Card>
+  )
+}
+
+function SavingsTargets() {
+  return (
+    <Card>
+      <CardHeader>
+        <Text className="text-sm font-semibold text-card-foreground">Savings Targets</Text>
+        <Text className="text-xs text-muted-foreground">Active milestones for 2024 across your portfolio.</Text>
+      </CardHeader>
+      <CardContent className="px-4 pb-4 gap-3">
+        {[
+          { title: "Retirement", value: "$420,000", progress: 65, achieved: "$273,000" },
+          { title: "Real Estate", value: "$85,000", progress: 32, achieved: "$27,200" },
+        ].map((item) => (
+          <View key={item.title} className="bg-muted rounded-lg p-3 gap-2">
+            <Text className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">{item.title}</Text>
+            <Text className="text-2xl font-semibold tabular-nums text-foreground">{item.value}</Text>
+            <Progress value={item.progress} />
+            <View className="flex-row justify-between">
+              <Text className="text-xs text-muted-foreground">{item.progress}% achieved</Text>
+              <Text className="text-xs font-medium tabular-nums text-foreground">{item.achieved}</Text>
+            </View>
+          </View>
+        ))}
+      </CardContent>
+    </Card>
+  )
+}
+
+function EmptyDistributeTrack() {
+  return (
+    <Card>
+      <CardContent className="items-center py-8 gap-3">
+        <View className="size-10 rounded-full bg-muted items-center justify-center">
+          <Text className="text-lg text-foreground">+</Text>
+        </View>
+        <Text className="text-sm font-semibold text-foreground">Distribute Track</Text>
+        <Text className="text-xs text-muted-foreground text-center text-balance px-4">
+          Upload your first master to start reaching listeners on Spotify, Apple Music, and more.
+        </Text>
+        <Button><Text className="text-xs text-primary-foreground">Create Release</Text></Button>
+      </CardContent>
+    </Card>
+  )
+}
+
+/* ---------- Skeleton Rail Placeholders (decorative) ---------- */
+
+function SkeletonRail() {
+  return (
+    <View className="hidden min-[2200px]:flex absolute top-12 z-0 opacity-50 gap-8 px-8">
+      <View className="gap-8">
+        {[1, 2, 3, 4].map((i) => (
+          <Card key={i} className="bg-muted/50">
+            <CardContent className="p-4 gap-2">
+              <View className="h-4 w-24 bg-muted rounded-md" />
+              <View className="h-3 w-32 bg-muted rounded-md" />
+              <View className="h-8 w-full bg-muted rounded-lg" />
+            </CardContent>
+          </Card>
+        ))}
+      </View>
+    </View>
+  )
+}
+
+/* ---------- Demo Wrapper ---------- */
+
+function CardsDemo() {
+  return (
+    <View
+      className="theme-neutral relative w-full flex-col gap-8 overflow-hidden bg-muted p-6 pb-0 lg:p-8 lg:pb-0 dark:bg-background"
+    >
+      <View className="mx-auto gap-8 flex-row flex-wrap justify-center xl:max-w-[1600px]">
+        {/* Column 1 */}
+        <View className="flex-1 min-w-[280px] max-w-[380px] gap-8">
+          <UIElements />
+          <SidebarNav />
+          <SavingsTargets />
+        </View>
+        {/* Column 2 */}
+        <View className="hidden lg:flex flex-1 min-w-[280px] max-w-[380px] gap-8">
+          <ContributionHistory />
+          <ClaimableBalance />
+          <DividendIncome />
+        </View>
+        {/* Column 3 */}
+        <View className="hidden xl:flex flex-1 min-w-[280px] max-w-[380px] gap-8">
+          <NewMilestone />
+          <PayoutThreshold />
+          <AccountAccess />
+        </View>
+        {/* Column 4 */}
+        <View className="hidden md:flex flex-1 min-w-[280px] max-w-[380px] gap-8">
+          <QrConnect />
+          <TransferFunds />
+          <Payments />
+        </View>
+        {/* Column 5 */}
+        <View className="hidden 3xl:flex flex-1 min-w-[280px] max-w-[380px] gap-8">
+          <EmptyDistributeTrack />
+          <AnalyticsCard />
+          <NotificationSettings />
+          <PowerUsage />
+        </View>
+      </View>
+    </View>
+  )
+}
+
+/* ---------- Main Page ---------- */
+
 export default function HomeScreen() {
-  const [switchChecked, setSwitchChecked] = useState(false)
-  const [tabValue, setTabValue] = useState("tab1")
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [termsChecked, setTermsChecked] = useState(false)
-  const [newsletterChecked, setNewsletterChecked] = useState(true)
-  const [togglePressed, setTogglePressed] = useState(false)
-  const [goal, setGoal] = useState(350)
-  const [comboboxValue, setComboboxValue] = useState("")
-  const { theme, setTheme, colorScheme, toggleColorScheme } = useTheme()
+  const { toggleColorScheme, colorScheme } = useTheme()
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <ScrollView>
-        {/* Hero */}
-        <View className="items-center px-6 pt-10 pb-6 md:pt-16 lg:pt-20">
-          <Badge variant="secondary" className="bg-muted mb-4">
-            <Text className="text-xs">
-              ✨ Introducing native-cn primitives
-            </Text>
-          </Badge>
-          <Text className="leading-tighter max-w-3xl text-center text-3xl font-semibold tracking-tight text-primary lg:text-5xl xl:tracking-tighter">
+      <ScrollView className="flex-1">
+        {/* Hero Section — matching shadcn/ui v4 exactly */}
+        <PageHeader>
+          <Announcement />
+          <PageHeaderHeading>
             The Foundation for your Design System
-          </Text>
-          <Text className="max-w-4xl text-center text-base text-foreground mt-3 sm:text-lg">
-            A set of beautifully designed components that you can customize,
-            extend, and build on. Start here then make it your own. Open
-            Source. Open Code.
-          </Text>
-          <View className="flex-row items-center justify-center gap-2 pt-4">
-            <Button onPress={() => {}}>
-              <Text className="text-sm font-medium text-primary-foreground">
-                Build Your Own →
-              </Text>
-            </Button>
-          </View>
-        </View>
-
-        {/* Theme Switcher */}
-        <View className="px-4 pb-2">
-          <Card className="p-3">
-            <Text className="text-sm font-semibold text-card-foreground mb-2">Theme</Text>
-            <View className="flex-row flex-wrap gap-1.5">
-              {themes.map((t) => (
-                <Badge
-                  key={t.name}
-                  variant={theme === t.name ? "default" : "outline"}
-                >
-                  <Text
-                    onPress={() => setTheme(t.name)}
-                    className={theme === t.name ? "text-primary-foreground" : "text-foreground"}
-                  >
-                    {t.label}
-                  </Text>
-                </Badge>
-              ))}
-            </View>
-            <View className="flex-row items-center justify-between mt-2">
-              <Text className="text-xs text-muted-foreground">
-                {colorScheme === "dark" ? "🌙 Dark" : "☀️ Light"}
-              </Text>
-              <Button variant="outline" onPress={toggleColorScheme}>
-                <Text className="text-xs text-foreground">Toggle mode</Text>
+          </PageHeaderHeading>
+          <PageHeaderDescription>
+            A set of beautifully designed components that you can customize, extend, and build on. Start here then make it your own. Open Source. Open Code.
+          </PageHeaderDescription>
+          <PageActions>
+            <Link href="/create" asChild>
+              <Button className="h-[31px] rounded-lg">
+                <Text className="text-sm font-medium text-primary-foreground">
+                  Build Your Own →
+                </Text>
               </Button>
-            </View>
-          </Card>
-        </View>
-
-        <Separator />
+            </Link>
+          </PageActions>
+        </PageHeader>
 
         {/* Cards Demo */}
-        <View className="px-4 pt-8 pb-16 gap-4">
-          {/* Stats */}
-          <Card className="p-4">
-            <Text className="text-xs text-muted-foreground">
-              Total Revenue
-            </Text>
-            <Text className="text-3xl font-bold text-foreground mt-1">
-              $15,231.89
-            </Text>
-            <Text className="text-xs text-muted-foreground mt-1">
-              +20.1% from last month
-            </Text>
-            <Separator className="my-3" />
-            <Text className="text-xs text-muted-foreground">Subscriptions</Text>
-            <Text className="text-3xl font-bold text-foreground mt-1">
-              +2,350
-            </Text>
-            <Text className="text-xs text-muted-foreground mt-1">
-              +180.1% from last month
-            </Text>
-          </Card>
-
-          {/* Upgrade Subscription */}
-          <Card className="p-4">
-            <Text className="text-lg font-semibold text-card-foreground">
-              Upgrade your Subscription
-            </Text>
-            <Text className="text-sm text-muted-foreground mt-1 text-balance">
-              You are currently on the free plan. Upgrade to the pro plan to
-              get access to all features.
-            </Text>
-            <View className="gap-3 mt-4">
-              <View className="flex-row gap-3">
-                <View className="flex-1">
-                  <Text className="text-sm text-foreground mb-1">Name</Text>
-                  <Input placeholder="Max Leiter" />
-                </View>
-                <View className="flex-1">
-                  <Text className="text-sm text-foreground mb-1">Email</Text>
-                  <Input placeholder="mail@acme.com" />
-                </View>
-              </View>
-              <Text className="text-sm text-foreground">Plan</Text>
-              <View className="flex-row gap-2">
-                <View className="flex-1 border border-border rounded-lg p-3 bg-muted/30">
-                  <Text className="text-sm font-medium text-foreground">
-                    Starter Plan
-                  </Text>
-                  <Text className="text-xs text-muted-foreground">
-                    For small businesses.
-                  </Text>
-                  <Text className="text-lg font-bold text-foreground mt-1">
-                    $10
-                  </Text>
-                </View>
-                <View className="flex-1 border border-border rounded-lg p-3 bg-muted/30">
-                  <Text className="text-sm font-medium text-foreground">
-                    Pro Plan
-                  </Text>
-                  <Text className="text-xs text-muted-foreground">
-                    More features and storage.
-                  </Text>
-                  <Text className="text-lg font-bold text-foreground mt-1">
-                    $20
-                  </Text>
-                </View>
-              </View>
-              <Textarea placeholder="Enter notes" />
-              <View className="gap-2">
-                <View className="flex-row items-center gap-2">
-                  <Checkbox
-                    checked={termsChecked}
-                    onCheckedChange={setTermsChecked}
-                  />
-                  <Text className="text-sm text-foreground">
-                    I agree to the terms and conditions
-                  </Text>
-                </View>
-                <View className="flex-row items-center gap-2">
-                  <Checkbox
-                    checked={newsletterChecked}
-                    onCheckedChange={setNewsletterChecked}
-                  />
-                  <Text className="text-sm text-foreground">
-                    Allow us to send you emails
-                  </Text>
-                </View>
-              </View>
-              <View className="flex-row gap-2">
-                <Button variant="outline" onPress={() => {}} className="flex-1">
-                  <Text className="text-sm text-foreground">Cancel</Text>
-                </Button>
-                <Button onPress={() => {}} className="flex-1">
-                  <Text className="text-sm font-medium text-primary-foreground">
-                    Upgrade Plan
-                  </Text>
-                </Button>
-              </View>
-            </View>
-          </Card>
-
-          {/* Tabs + Settings */}
-          <Card className="p-4">
-            <Text className="text-lg font-semibold text-card-foreground mb-3">
-              Settings
-            </Text>
-            <Tabs
-              value={tabValue}
-              onValueChange={setTabValue}
-              options={[
-                { label: "Account", value: "tab1" },
-                { label: "Password", value: "tab2" },
-              ]}
-            />
-            {tabValue === "tab1" ? (
-              <View className="gap-3 mt-3">
-                <View className="flex-row items-center justify-between">
-                  <Text className="text-sm text-foreground">
-                    Email notifications
-                  </Text>
-                  <Switch
-                    checked={switchChecked}
-                    onCheckedChange={setSwitchChecked}
-                  />
-                </View>
-                <View className="flex-row items-center justify-between">
-                  <Text className="text-sm text-foreground">Dark mode</Text>
-                  <Switch checked={true} onCheckedChange={() => {}} />
-                </View>
-                <View className="flex-row items-center justify-between">
-                  <Text className="text-sm text-foreground">Public profile</Text>
-                  <Switch checked={false} onCheckedChange={() => {}} />
-                </View>
-              </View>
-            ) : (
-              <View className="gap-3 mt-3">
-                <Text className="text-sm text-foreground mb-1">
-                  Current password
-                </Text>
-                <Input placeholder="••••••••" />
-                <Text className="text-sm text-foreground mb-1">
-                  New password
-                </Text>
-                <Input placeholder="Enter new password" />
-                <Button onPress={() => {}}>
-                  <Text className="text-sm font-medium text-primary-foreground">
-                    Update Password
-                  </Text>
-                </Button>
-              </View>
-            )}
-          </Card>
-
-          {/* Activity Goal */}
-          <Card className="p-4">
-            <Text className="text-lg font-semibold text-card-foreground">
-              Move Goal
-            </Text>
-            <Text className="text-sm text-muted-foreground mt-1">
-              Set your daily activity goal.
-            </Text>
-            <View className="items-center justify-center py-4">
-              <Text className="text-4xl font-bold tracking-tighter text-foreground tabular-nums">
-                {goal}
-              </Text>
-              <Text className="text-xs text-muted-foreground uppercase">
-                Calories/day
-              </Text>
-            </View>
-            <View className="flex-row items-center justify-center gap-4 mb-3">
-              <Button
-                variant="outline"
-                onPress={() => setGoal(Math.max(200, goal - 10))}
-                disabled={goal <= 200}
-              >
-                <Text className="text-foreground">−</Text>
-              </Button>
-              <Progress value={(goal / 400) * 100} className="flex-1" />
-              <Button
-                variant="outline"
-                onPress={() => setGoal(Math.min(400, goal + 10))}
-                disabled={goal >= 400}
-              >
-                <Text className="text-foreground">+</Text>
-              </Button>
-            </View>
-            <Button variant="secondary" onPress={() => {}}>
-              <Text className="text-sm font-medium text-secondary-foreground text-center">
-                Set Goal
-              </Text>
-            </Button>
-          </Card>
-
-          {/* Team Members */}
-          <Card className="p-4">
-            <Text className="text-lg font-semibold text-card-foreground mb-3">
-              Team
-            </Text>
-            <View className="gap-3">
-              {[
-                { name: "Olivia Martin", role: "Product Designer", initials: "OM" },
-                { name: "Jackson Lee", role: "Software Engineer", initials: "JL" },
-                { name: "Isabella Nguyen", role: "Data Analyst", initials: "IN" },
-              ].map((member) => (
-                <View
-                  key={member.name}
-                  className="flex-row items-center gap-3"
-                >
-                  <Avatar alt={member.name} size="sm" fallback={member.initials} />
-                  <View className="flex-1">
-                    <Text className="text-sm font-medium text-foreground">
-                      {member.name}
-                    </Text>
-                    <Text className="text-xs text-muted-foreground">
-                      {member.role}
-                    </Text>
-                  </View>
-                  <Badge variant="outline">
-                    <Text className="text-xs">Member</Text>
-                  </Badge>
-                </View>
-              ))}
-            </View>
-          </Card>
-
-          {/* Chat Preview */}
-          <Card className="p-4">
-            <View className="flex-row items-center gap-3 mb-3">
-              <Avatar alt="Sofia Davis" size="sm" fallback="SD" />
-              <View>
-                <Text className="text-sm font-medium text-foreground">
-                  Sofia Davis
-                </Text>
-                <Text className="text-xs text-muted-foreground">
-                  m@example.com
-                </Text>
-              </View>
-            </View>
-            <View className="gap-2">
-              <View className="bg-muted self-start max-w-[75%] rounded-lg px-3 py-2">
-                <Text className="text-sm text-foreground">
-                  Hi, how can I help you today?
-                </Text>
-              </View>
-              <View className="bg-primary self-end max-w-[75%] rounded-lg px-3 py-2">
-                <Text className="text-sm text-primary-foreground">
-                  Hey, I&apos;m having trouble with my account.
-                </Text>
-              </View>
-              <View className="bg-muted self-start max-w-[75%] rounded-lg px-3 py-2">
-                <Text className="text-sm text-foreground">
-                  What seems to be the problem?
-                </Text>
-              </View>
-            </View>
-            <View className="flex-row gap-2 mt-3">
-              <Input placeholder="Type your message..." className="flex-1" />
-              <Button onPress={() => {}}>
-                <Text className="text-sm font-medium text-primary-foreground">
-                  Send
-                </Text>
-              </Button>
-            </View>
-          </Card>
-
-          {/* Alerts / Notifications */}
-          <Alert title="Heads up!" variant="default">
-            We just shipped v0.1.0 — check out the new components.
-          </Alert>
-
-          {/* More primitives showcase */}
-          <Card className="p-4">
-            <Text className="text-lg font-semibold text-card-foreground mb-3">
-              More Primitives
-            </Text>
-            <View className="flex-row flex-wrap gap-2 mb-3">
-              <Badge>Badge</Badge>
-              <Badge variant="secondary">Badge</Badge>
-              <Badge variant="outline">Badge</Badge>
-              <Badge variant="destructive">Badge</Badge>
-            </View>
-            <View className="flex-row gap-2 mb-3">
-              <Toggle
-                pressed={togglePressed}
-                onPressedChange={setTogglePressed}
-                label="Bold"
-              />
-              <Toggle pressed={false} onPressedChange={() => {}} label="Italic" />
-              <Toggle pressed={false} onPressedChange={() => {}} label="Underline" />
-            </View>
-            <View className="flex-row gap-2">
-              <Tooltip content="Edit your profile">
-                <Button variant="outline" onPress={() => {}}>
-                  <Text className="text-sm text-foreground">Hover me</Text>
-                </Button>
-              </Tooltip>
-              <Button onPress={() => setDialogOpen(true)}>
-                <Text className="text-sm font-medium text-primary-foreground">
-                  Open Dialog
-                </Text>
-              </Button>
-            </View>
-            <Dialog
-              open={dialogOpen}
-              onOpenChange={setDialogOpen}
-              title="Confirm"
-              description="This action cannot be undone."
-            >
-              <DialogFooter>
-                <DialogClose onPress={() => setDialogOpen(false)} />
-                <Button onPress={() => setDialogOpen(false)}>
-                  <Text className="text-sm font-medium text-primary-foreground">
-                    Continue
-                  </Text>
-                </Button>
-              </DialogFooter>
-            </Dialog>
-          </Card>
-
-          {/* Charts */}
-          <Card className="p-4">
-            <Text className="text-lg font-semibold text-card-foreground mb-3">
-              Charts
-            </Text>
-            {(() => {
-              const chartData = [
-                { month: "Jan", revenue: 400, expenses: 240 },
-                { month: "Feb", revenue: 300, expenses: 139 },
-                { month: "Mar", revenue: 500, expenses: 380 },
-                { month: "Apr", revenue: 280, expenses: 190 },
-                { month: "May", revenue: 590, expenses: 430 },
-                { month: "Jun", revenue: 490, expenses: 340 },
-              ]
-              const pieData = [
-                { name: "Products", value: 45 },
-                { name: "Services", value: 30 },
-                { name: "Licenses", value: 15 },
-                { name: "Support", value: 10 },
-              ]
-              const chartConfig = {
-                revenue: { label: "Revenue", color: "hsl(221.2 83.2% 53.3%)" },
-                expenses: { label: "Expenses", color: "hsl(0 84.2% 60.2%)" },
-              }
-              const pieConfig = {
-                products: { label: "Products", color: "#3b82f6" },
-                services: { label: "Services", color: "#22c55e" },
-                licenses: { label: "Licenses", color: "#f59e0b" },
-                support: { label: "Support", color: "#8b5cf6" },
-              }
-
-              return (
-                <>
-                  <ChartContainer config={chartConfig}>
-                    <Text className="text-xs text-muted-foreground mb-1">Bar Chart</Text>
-                    <BarChart data={chartData} config={chartConfig} xKey="month" yKey="revenue" height={160} />
-                    <ChartLegend config={chartConfig} />
-                  </ChartContainer>
-                  <View className="h-4" />
-                  <ChartContainer config={chartConfig}>
-                    <Text className="text-xs text-muted-foreground mb-1">Line Chart</Text>
-                    <LineChart data={chartData} config={chartConfig} xKey="month" yKey="expenses" height={160} />
-                  </ChartContainer>
-                  <View className="h-4" />
-                  <ChartContainer config={pieConfig}>
-                    <Text className="text-xs text-muted-foreground mb-1">Pie Chart</Text>
-                    <PieChart data={pieData} config={pieConfig} nameKey="name" valueKey="value" size={180} innerRadius={40} />
-                    <ChartLegend config={pieConfig} />
-                  </ChartContainer>
-                </>
-              )
-            })()}
-          </Card>
-
-          {/* Combobox */}
-          <Card className="p-4">
-            <Text className="text-lg font-semibold text-card-foreground mb-3">
-              Combobox
-            </Text>
-            <Combobox
-              value={comboboxValue}
-              onValueChange={setComboboxValue}
-              options={[
-                { label: "Apple", value: "apple" },
-                { label: "Banana", value: "banana" },
-                { label: "Cherry", value: "cherry" },
-                { label: "Date", value: "date" },
-                { label: "Elderberry", value: "elderberry" },
-              ]}
-              placeholder="Pick a fruit..."
-            />
-          </Card>
-
-          {/* Quick links */}
-          <View className="items-center gap-3 py-4">
-            <Link href="/docs" asChild>
-              <Button size="lg">
-                <Text className="text-primary-foreground font-semibold">Documentation</Text>
-              </Button>
-            </Link>
-            <Link href="/examples" asChild>
-              <Button variant="outline" size="lg">
-                <Text className="text-foreground font-semibold">Browse Examples</Text>
-              </Button>
-            </Link>
-          </View>
-
-          {/* All components count */}
-          <View className="items-center py-2">
-            <Text className="text-center text-xs text-muted-foreground">
-              55 components + 7 examples from @native-cn/primitives
-            </Text>
-          </View>
-        </View>
+        <CardsDemo />
       </ScrollView>
     </SafeAreaView>
   )
