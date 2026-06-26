@@ -496,9 +496,14 @@ export default function HomeScreen() {
 
           {/* Quick links */}
           <View className="items-center gap-3 py-4">
-            <Link href="/examples" asChild>
+            <Link href="/docs" asChild>
               <Button size="lg">
-                <Text className="text-primary-foreground font-semibold">Browse Examples</Text>
+                <Text className="text-primary-foreground font-semibold">Documentation</Text>
+              </Button>
+            </Link>
+            <Link href="/examples" asChild>
+              <Button variant="outline" size="lg">
+                <Text className="text-foreground font-semibold">Browse Examples</Text>
               </Button>
             </Link>
           </View>
