@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { View, Text, ScrollView } from "react-native"
+import { Link } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
 import {
   Button,
@@ -493,10 +494,19 @@ export default function HomeScreen() {
             />
           </Card>
 
+          {/* Quick links */}
+          <View className="items-center gap-3 py-4">
+            <Link href="/examples" asChild>
+              <Button size="lg">
+                <Text className="text-primary-foreground font-semibold">Browse Examples</Text>
+              </Button>
+            </Link>
+          </View>
+
           {/* All components count */}
           <View className="items-center py-2">
             <Text className="text-center text-xs text-muted-foreground">
-              55 components from @native-cn/primitives + useMobile + DirectionProvider
+              55 components + 7 examples from @native-cn/primitives
             </Text>
           </View>
         </View>

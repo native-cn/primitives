@@ -432,6 +432,55 @@
       "type": "registry:hook",
       "dependencies": ["react"],
       "files": [{ "path": "hooks/use-toast.ts", "type": "registry:hook" }]
+    },
+    {
+      "name": "button-examples",
+      "type": "registry:example",
+      "dependencies": ["react"],
+      "registryDependencies": ["button"],
+      "files": [{ "path": "__examples__/button-examples.tsx", "type": "registry:example" }]
+    },
+    {
+      "name": "card-examples",
+      "type": "registry:example",
+      "dependencies": ["react"],
+      "registryDependencies": ["card", "button", "separator"],
+      "files": [{ "path": "__examples__/card-examples.tsx", "type": "registry:example" }]
+    },
+    {
+      "name": "form-examples",
+      "type": "registry:example",
+      "dependencies": ["react"],
+      "registryDependencies": ["card", "button", "label"],
+      "files": [{ "path": "__examples__/form-examples.tsx", "type": "registry:example" }]
+    },
+    {
+      "name": "dialog-examples",
+      "type": "registry:example",
+      "dependencies": ["react"],
+      "registryDependencies": ["dialog", "button", "card"],
+      "files": [{ "path": "__examples__/dialog-examples.tsx", "type": "registry:example" }]
+    },
+    {
+      "name": "tabs-examples",
+      "type": "registry:example",
+      "dependencies": ["react"],
+      "registryDependencies": ["tabs"],
+      "files": [{ "path": "__examples__/tabs-examples.tsx", "type": "registry:example" }]
+    },
+    {
+      "name": "combobox-examples",
+      "type": "registry:example",
+      "dependencies": ["react"],
+      "registryDependencies": ["combobox", "card"],
+      "files": [{ "path": "__examples__/combobox-examples.tsx", "type": "registry:example" }]
+    },
+    {
+      "name": "chart-examples",
+      "type": "registry:example",
+      "dependencies": ["react", "react-native-svg"],
+      "registryDependencies": ["chart"],
+      "files": [{ "path": "__examples__/chart-examples.tsx", "type": "registry:example" }]
     }
   ]
 }

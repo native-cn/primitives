@@ -7,6 +7,7 @@ import { build } from "./commands/build"
 import { diff } from "./commands/diff"
 import { info } from "./commands/info"
 import { update } from "./commands/update"
+import { listSources, addSource, removeSource } from "./commands/registry"
 
 process.on("SIGINT", () => process.exit(0))
 process.on("SIGTERM", () => process.exit(0))
@@ -74,6 +75,37 @@ program
   .option("--registry <path>", "Path to registry.json", undefined)
   .action(async (components: string[], opts) => {
     await update({ cwd: opts.cwd, registry: opts.registry, components })
+  })
+
+const registry = program
+  .command("registry")
+  .description("Manage registry sources")
+
+registry
+  .command("list")
+  .description("List registered registry sources")
+  .option("--cwd <cwd>", "Working directory", process.cwd())
+  .action(async (opts) => {
+    listSources({ cwd: opts.cwd })
+  })
+
+registry
+  .command("add")
+  .description("Add a registry source")
+  .argument("<name>", "Registry name")
+  .argument("<url>", "Registry URL")
+  .option("--cwd <cwd>", "Working directory", process.cwd())
+  .action(async (name: string, url: string, opts) => {
+    addSource({ cwd: opts.cwd, name, url })
+  })
+
+registry
+  .command("remove")
+  .description("Remove a registry source")
+  .argument("<name>", "Registry name")
+  .option("--cwd <cwd>", "Working directory", process.cwd())
+  .action(async (name: string, opts) => {
+    removeSource({ cwd: opts.cwd, name })
   })
 
 program.parse()

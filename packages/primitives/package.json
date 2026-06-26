@@ -19,6 +19,10 @@
       "types": "./dist-types/lib/*.d.ts",
       "default": "./src/lib/*.ts"
     },
+    "./__examples__/*": {
+      "types": "./dist-types/__examples__/*.d.ts",
+      "default": "./src/__examples__/*.tsx"
+    },
     "./registry": "./registry/registry.json",
     "./tailwind": "./src/tailwind-preset.js",
     "./package.json": "./package.json"

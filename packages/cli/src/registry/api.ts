@@ -71,3 +71,32 @@ export function listComponents(registry: Registry, type?: string): RegistryItem[
   }
   return registry.items
 }
+
+export function searchRegistry(registry: Registry, query: string): RegistryItem[] {
+  const lower = query.toLowerCase()
+  return registry.items.filter(
+    (i) =>
+      i.name.toLowerCase().includes(lower)
+  )
+}
+
+export function loadRegistriesFromSources(cwd: string): { items: RegistryItem[]; sources: string[] } {
+  const sourcesPath = resolve(cwd, "native-cn-sources.json")
+  if (!existsSync(sourcesPath)) return { items: [], sources: [] }
+
+  const sources = JSON.parse(readFileSync(sourcesPath, "utf-8"))
+  const allItems: RegistryItem[] = []
+  const loadedSources: string[] = []
+
+  for (const source of sources) {
+    try {
+      const registry = loadRegistry(source.url)
+      allItems.push(...registry.items)
+      loadedSources.push(source.name)
+    } catch {
+      // skip unloadable sources
+    }
+  }
+
+  return { items: allItems, sources: loadedSources }
+}
