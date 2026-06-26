@@ -4,6 +4,9 @@ import pkg from "../package.json" with { type: "json" }
 import { init } from "./commands/init"
 import { add } from "./commands/add"
 import { build } from "./commands/build"
+import { diff } from "./commands/diff"
+import { info } from "./commands/info"
+import { update } from "./commands/update"
 
 process.on("SIGINT", () => process.exit(0))
 process.on("SIGTERM", () => process.exit(0))
@@ -43,6 +46,34 @@ program
   .option("-o, --output <path>", "Output path", undefined)
   .action(async (opts) => {
     await build({ cwd: opts.cwd, registry: opts.registry, output: opts.output })
+  })
+
+program
+  .command("diff")
+  .description("Check installed components against the registry")
+  .argument("[components...]", "Component names to check")
+  .option("--cwd <cwd>", "Working directory", process.cwd())
+  .option("--registry <path>", "Path to registry.json", undefined)
+  .action(async (components: string[], opts) => {
+    await diff({ cwd: opts.cwd, registry: opts.registry, components })
+  })
+
+program
+  .command("info")
+  .description("Show system information")
+  .option("--cwd <cwd>", "Working directory", process.cwd())
+  .action(async (opts) => {
+    await info({ cwd: opts.cwd })
+  })
+
+program
+  .command("update")
+  .description("Update installed components to the latest registry version")
+  .argument("[components...]", "Component names to update")
+  .option("--cwd <cwd>", "Working directory", process.cwd())
+  .option("--registry <path>", "Path to registry.json", undefined)
+  .action(async (components: string[], opts) => {
+    await update({ cwd: opts.cwd, registry: opts.registry, components })
   })
 
 program.parse()

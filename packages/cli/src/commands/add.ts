@@ -12,6 +12,28 @@ interface AddOptions {
 
 const _require = createRequire(import.meta.url)
 
+const REGISTRY_BASE_URL = "https://raw.githubusercontent.com/native-cn/primitives/main/packages/primitives/src"
+
+async function readComponentFile(filePath: string): Promise<string | null> {
+  // Try local source first (when running from repo)
+  try {
+    const sourcesDir = resolve(__dirname, "../../../primitives/src")
+    const localPath = resolve(sourcesDir, filePath)
+    if (existsSync(localPath)) {
+      return readFileSync(localPath, "utf-8")
+    }
+  } catch {}
+
+  // Fall back to remote fetch
+  try {
+    const url = `${REGISTRY_BASE_URL}/${filePath}`
+    const response = await fetch(url)
+    if (response.ok) return await response.text()
+  } catch {}
+
+  return null
+}
+
 export async function add(options: AddOptions) {
   const cwd = options.cwd || process.cwd()
 
@@ -58,7 +80,7 @@ export async function add(options: AddOptions) {
     if (missing.length > 0) {
       try {
         const { execSync } = await import("node:child_process")
-        execSync(`npm install ${missing.join(" ")}`, {
+        execSync(`${pmBin(cwd)} install ${missing.join(" ")}`, {
           cwd,
           stdio: "inherit",
         })
@@ -73,11 +95,15 @@ export async function add(options: AddOptions) {
 
   // Write component files
   step("Copying component files")
-  const sourcesDir = resolve(__dirname, "../../../primitives/src")
 
   for (const component of resolved.components) {
     for (const file of component.files) {
-      const sourcePath = resolve(sourcesDir, file.path)
+      const fileContent = await readComponentFile(file.path)
+      if (fileContent === null) {
+        warn(`Could not read source for ${file.path} — skipping`)
+        continue
+      }
+
       const destPath = resolve(
         cwd,
         "components",
@@ -85,16 +111,11 @@ export async function add(options: AddOptions) {
         file.path.replace("ui/", "").replace("lib/", "").replace("hooks/", "")
       )
 
-      if (!existsSync(sourcePath)) {
-        continue
-      }
-
       const destDir = dirname(destPath)
       if (!existsSync(destDir)) {
         mkdirSync(destDir, { recursive: true })
       }
 
-      const fileContent = readFileSync(sourcePath, "utf-8")
       writeFileSync(destPath, fileContent)
       muted(`  ${relative(cwd, destPath)}`)
     }
@@ -102,4 +123,10 @@ export async function add(options: AddOptions) {
 
   success(`${resolved.components.length} component(s) added`)
   muted(`Components installed in ${resolve(cwd, "components/ui")}`)
+}
+
+function pmBin(cwd: string): string {
+  const hasPnpm = existsSync(resolve(cwd, "pnpm-lock.yaml"))
+  const hasYarn = existsSync(resolve(cwd, "yarn.lock"))
+  return hasPnpm ? "pnpm" : hasYarn ? "yarn" : "npm"
 }
