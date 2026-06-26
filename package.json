@@ -9,6 +9,7 @@
     "start:web": "cd apps/demo && npx expo start --web --clear",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "cli": "pnpm --filter @native-cn/cli build && node packages/cli/dist/index.js",
     "clean": "turbo run clean",
     "format": "prettier --check \"**/*.{ts,tsx,md}\"",
     "version:primitives": "pnpm --filter @native-cn/primitives version",

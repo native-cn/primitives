@@ -1,0 +1,37 @@
+{
+  "name": "@native-cn/cli",
+  "version": "0.1.0",
+  "description": "CLI for native-cn — shadcn/ui primitives for React Native",
+  "type": "module",
+  "bin": {
+    "native-cn": "./dist/index.js"
+  },
+  "files": ["dist/", "src/"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "commander": "^12.0.0",
+    "zod": "^3.23.0",
+    "picocolors": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/native-cn/primitives.git",
+    "directory": "packages/cli"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}
