@@ -1,8 +1,9 @@
 import { Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useEffect } from "react"
-import { useColorScheme } from "react-native"
+import { View } from "react-native"
 import { ThemeProvider, useTheme } from "@native-cn/primitives"
+import { SiteHeader, SiteFooter } from "../components/site-nav"
 import "../global.css"
 
 function ThemedStatusBar() {
@@ -19,7 +20,13 @@ export default function RootLayout() {
   return (
     <ThemeProvider defaultTheme="neutral">
       <ThemedStatusBar />
-      <Stack screenOptions={{ headerShown: false }} />
+      <View className="flex-1 bg-background">
+        <SiteHeader />
+        <View className="flex-1">
+          <Stack screenOptions={{ headerShown: false }} />
+        </View>
+        <SiteFooter />
+      </View>
     </ThemeProvider>
   )
 }
