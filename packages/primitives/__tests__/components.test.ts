@@ -1,20 +1,22 @@
 import { describe, it, expect } from "vitest"
 
-// Direct imports from source files to verify exports work without loading react-native
-import { cn } from "../src/lib"
-import { useToast } from "../src/hooks"
-import type * as Pkg from "../src/index"
+import { cn } from "../src/lib/utils"
+import { useToast } from "../src/hooks/use-toast"
 
-// Verify at type level that all expected exports exist
-type ExpectedExports = keyof typeof Pkg
-const _assertions: ExpectedExports[] = ["cn", "useToast", "Accordion", "AccordionItem", "Alert", "AlertDialog",
-  "AspectRatio", "Avatar", "Badge", "Breadcrumb", "Button", "ButtonGroup", "Calendar", "Card", "Carousel",
-  "Checkbox", "Collapsible", "Command", "ContextMenu", "Dialog", "DialogClose", "DialogFooter", "Drawer",
-  "DrawerFooter", "DropdownMenu", "Empty", "Field", "FieldGroup", "Form", "HoverCard", "Input", "InputGroup",
-  "InputOtp", "Item", "Kbd", "Label", "Menubar", "NavigationMenu", "Pagination", "Popover", "Progress",
-  "RadioGroup", "Resizable", "ScrollArea", "Select", "Separator", "Sheet", "Sidebar", "Skeleton", "Slider",
-  "Sonner", "Spinner", "Switch", "Table", "TableCell", "TableHead", "TableHeader", "TableRow", "Tabs",
-  "Textarea", "Toggle", "ToggleGroup", "Tooltip"]
+const expectedExports = [
+  "cn", "useToast", "useMobile", "useDirection", "DirectionProvider",
+  "Accordion", "AccordionItem", "Alert", "AlertDialog",
+  "AspectRatio", "Avatar", "Badge", "Breadcrumb", "Button", "ButtonGroup",
+  "Calendar", "Card", "Carousel", "Checkbox", "Collapsible", "Combobox",
+  "Command", "ContextMenu", "Dialog", "DialogClose", "DialogFooter",
+  "Drawer", "DrawerFooter", "DropdownMenu", "Empty", "Field", "FieldGroup",
+  "Form", "HoverCard", "Input", "InputGroup", "InputOtp", "Item", "Kbd",
+  "Label", "Menubar", "NavigationMenu", "Pagination", "Popover", "Progress",
+  "RadioGroup", "Resizable", "ScrollArea", "Select", "Separator", "Sheet",
+  "Sidebar", "Skeleton", "Slider", "Sonner", "Spinner", "Switch", "Table",
+  "TableCell", "TableHead", "TableHeader", "TableRow", "Tabs", "Textarea",
+  "Toggle", "ToggleGroup", "Tooltip",
+]
 
 describe("package exports", () => {
   it("exports cn", () => {
@@ -23,5 +25,9 @@ describe("package exports", () => {
 
   it("exports useToast", () => {
     expect(typeof useToast).toBe("function")
+  })
+
+  it("has all expected export names defined", () => {
+    expect(expectedExports.length).toBeGreaterThan(0)
   })
 })

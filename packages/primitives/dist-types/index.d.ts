@@ -26,6 +26,7 @@ declare module "react-native" {
 }
 export { cn } from "./lib";
 export { useToast } from "./hooks";
+export { useMobile } from "./hooks/use-mobile";
 export { Accordion, AccordionItem } from "./ui/accordion";
 export { Alert } from "./ui/alert";
 export { AlertDialog } from "./ui/alert-dialog";
@@ -40,9 +41,11 @@ export { Card } from "./ui/card";
 export { Carousel } from "./ui/carousel";
 export { Checkbox } from "./ui/checkbox";
 export { Collapsible } from "./ui/collapsible";
+export { Combobox } from "./ui/combobox";
 export { Command } from "./ui/command";
 export { ContextMenu } from "./ui/context-menu";
 export { Dialog, DialogClose, DialogFooter } from "./ui/dialog";
+export { DirectionProvider, useDirection } from "./ui/direction";
 export { Drawer, DrawerFooter } from "./ui/drawer";
 export { DropdownMenu } from "./ui/dropdown-menu";
 export { Empty } from "./ui/empty";

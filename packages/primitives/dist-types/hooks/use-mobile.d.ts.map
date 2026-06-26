@@ -1,0 +1,1 @@
+{"version":3,"file":"use-mobile.d.ts","sourceRoot":"","sources":["../../src/hooks/use-mobile.ts"],"names":[],"mappings":"AAEA,UAAU,eAAe;IACvB,QAAQ,EAAE,OAAO,CAAA;IACjB,QAAQ,EAAE,OAAO,CAAA;IACjB,SAAS,EAAE,OAAO,CAAA;IAClB,KAAK,EAAE,MAAM,CAAA;IACb,MAAM,EAAE,MAAM,CAAA;CACf;AAKD,wBAAgB,SAAS,IAAI,eAAe,CAU3C"}

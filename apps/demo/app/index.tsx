@@ -19,6 +19,7 @@ import {
   DialogClose,
   Toggle,
   Tooltip,
+  Combobox,
 } from "@native-cn/primitives"
 
 export default function HomeScreen() {
@@ -29,6 +30,7 @@ export default function HomeScreen() {
   const [newsletterChecked, setNewsletterChecked] = useState(true)
   const [togglePressed, setTogglePressed] = useState(false)
   const [goal, setGoal] = useState(350)
+  const [comboboxValue, setComboboxValue] = useState("")
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -379,10 +381,29 @@ export default function HomeScreen() {
             </Dialog>
           </Card>
 
+          {/* Combobox */}
+          <Card className="p-4">
+            <Text className="text-lg font-semibold text-card-foreground mb-3">
+              Combobox
+            </Text>
+            <Combobox
+              value={comboboxValue}
+              onValueChange={setComboboxValue}
+              options={[
+                { label: "Apple", value: "apple" },
+                { label: "Banana", value: "banana" },
+                { label: "Cherry", value: "cherry" },
+                { label: "Date", value: "date" },
+                { label: "Elderberry", value: "elderberry" },
+              ]}
+              placeholder="Pick a fruit..."
+            />
+          </Card>
+
           {/* All components count */}
           <View className="items-center py-2">
             <Text className="text-center text-xs text-muted-foreground">
-              54 components from @native-cn/primitives
+              55 components from @native-cn/primitives + useMobile + DirectionProvider
             </Text>
           </View>
         </View>

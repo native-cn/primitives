@@ -46,6 +46,20 @@
       "files": [{ "path": "ui/button.tsx", "type": "registry:ui" }]
     },
     {
+      "name": "combobox",
+      "type": "registry:ui",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [{ "path": "ui/combobox.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "direction",
+      "type": "registry:ui",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [{ "path": "ui/direction.tsx", "type": "registry:ui" }]
+    },
+    {
       "name": "button-group",
       "type": "registry:ui",
       "dependencies": [],
@@ -379,6 +393,12 @@
       "type": "registry:lib",
       "dependencies": ["clsx", "tailwind-merge"],
       "files": [{ "path": "lib/utils.ts", "type": "registry:lib" }]
+    },
+    {
+      "name": "use-mobile",
+      "type": "registry:hook",
+      "dependencies": ["react"],
+      "files": [{ "path": "hooks/use-mobile.ts", "type": "registry:hook" }]
     },
     {
       "name": "use-toast",
