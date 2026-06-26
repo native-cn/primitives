@@ -1,345 +1,390 @@
 import { useState } from "react"
-import { View, Text, ScrollView, Pressable, TextInput } from "react-native"
+import { View, Text, ScrollView } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import {
   Button,
   Badge,
   Card,
-  Separator,
   Input,
   Switch,
-  Checkbox,
   Tabs,
   Progress,
-  Spinner,
-  Skeleton,
   Avatar,
+  Separator,
   Alert,
-  Accordion,
-  AccordionItem,
-  Toggle,
-  RadioGroup,
-  Select,
+  Checkbox,
   Textarea,
-  Kbd,
-  Empty,
-  Item,
-  Breadcrumb,
-  Pagination,
-  Tooltip,
-  Popover,
   Dialog,
   DialogFooter,
   DialogClose,
-  Drawer,
-  DrawerFooter,
-  Sheet,
-  DropdownMenu,
-  ContextMenu,
-  AlertDialog,
-  Calendar,
-  Carousel,
-  Command,
-  InputOtp,
-  Field,
-  Form,
-  Menubar,
-  NavigationMenu,
-  Sidebar,
-  ScrollArea,
-  Resizable,
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableCell,
-  Sonner,
-  HoverCard,
-  AspectRatio,
-  ButtonGroup,
-  ToggleGroup,
-  Slider,
+  Toggle,
+  Tooltip,
 } from "@native-cn/primitives"
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <View className="mb-8">
-      <Text className="text-lg font-bold text-foreground mb-1">{title}</Text>
-      <Separator className="mb-4" />
-      {children}
-    </View>
-  )
-}
-
-function Demo({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <View className="mb-4">
-      <Text className="text-xs text-muted-foreground mb-2">{label}</Text>
-      <View className="flex-row flex-wrap items-center gap-3">{children}</View>
-    </View>
-  )
-}
 
 export default function HomeScreen() {
   const [switchChecked, setSwitchChecked] = useState(false)
-  const [checkboxChecked, setCheckboxChecked] = useState(false)
-  const [radioValue, setRadioValue] = useState("1")
-  const [selectValue, setSelectValue] = useState("")
-  const [togglePressed, setTogglePressed] = useState(false)
   const [tabValue, setTabValue] = useState("tab1")
-  const [currentPage, setCurrentPage] = useState(1)
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [drawerOpen, setDrawerOpen] = useState(false)
-  const [sheetOpen, setSheetOpen] = useState(false)
-  const [alertDialogOpen, setAlertDialogOpen] = useState(false)
-  const [sonnerVisible, setSonnerVisible] = useState(false)
-  const [otpValue, setOtpValue] = useState("")
-  const [date, setDate] = useState<Date | undefined>(undefined)
+  const [termsChecked, setTermsChecked] = useState(false)
+  const [newsletterChecked, setNewsletterChecked] = useState(true)
+  const [togglePressed, setTogglePressed] = useState(false)
+  const [goal, setGoal] = useState(350)
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScrollView>
-        <View className="px-4 pt-4 pb-20">
-          <Text className="text-3xl font-bold text-foreground mb-1">native-cn</Text>
-          <Text className="text-sm text-muted-foreground mb-6 pb-2">
-            shadcn/ui primitives for React Native — 54 components
+        {/* Hero */}
+        <View className="items-center px-6 pt-10 pb-6 md:pt-16 lg:pt-20">
+          <Badge variant="secondary" className="bg-muted mb-4">
+            <Text className="text-xs">
+              ✨ Introducing native-cn primitives
+            </Text>
+          </Badge>
+          <Text className="leading-tighter max-w-3xl text-center text-3xl font-semibold tracking-tight text-primary lg:text-5xl xl:tracking-tighter">
+            The Foundation for your Design System
           </Text>
+          <Text className="max-w-4xl text-center text-base text-foreground mt-3 sm:text-lg">
+            A set of beautifully designed components that you can customize,
+            extend, and build on. Start here then make it your own. Open
+            Source. Open Code.
+          </Text>
+          <View className="flex-row items-center justify-center gap-2 pt-4">
+            <Button onPress={() => {}}>
+              <Text className="text-sm font-medium text-primary-foreground">
+                Build Your Own →
+              </Text>
+            </Button>
+          </View>
+        </View>
 
-          <Section title="Buttons & Actions">
-            <Demo label="Button variants">
-              <Button onPress={() => {}}><Text className="text-sm font-medium text-primary-foreground">Default</Text></Button>
-              <Button variant="secondary" onPress={() => {}}><Text className="text-sm font-medium text-secondary-foreground">Secondary</Text></Button>
-              <Button variant="outline" onPress={() => {}}><Text className="text-sm font-medium text-foreground">Outline</Text></Button>
-              <Button variant="ghost" onPress={() => {}}><Text className="text-sm font-medium text-foreground">Ghost</Text></Button>
-              <Button variant="destructive" onPress={() => {}}><Text className="text-sm font-medium text-destructive-foreground">Destructive</Text></Button>
-              <Button variant="link" onPress={() => {}}><Text className="text-sm font-medium text-primary underline">Link</Text></Button>
-            </Demo>
-            <Demo label="Button Group">
-              <ButtonGroup>
-                <Button variant="outline" onPress={() => {}}><Text className="text-sm text-foreground">Left</Text></Button>
-                <Button variant="outline" onPress={() => {}}><Text className="text-sm text-foreground">Center</Text></Button>
-                <Button variant="outline" onPress={() => {}}><Text className="text-sm text-foreground">Right</Text></Button>
-              </ButtonGroup>
-            </Demo>
-            <Demo label="Toggle">
-              <Toggle pressed={togglePressed} onPressedChange={setTogglePressed} label="Bold" />
+        <Separator />
+
+        {/* Cards Demo */}
+        <View className="px-4 pt-8 pb-16 gap-4">
+          {/* Stats */}
+          <Card className="p-4">
+            <Text className="text-xs text-muted-foreground">
+              Total Revenue
+            </Text>
+            <Text className="text-3xl font-bold text-foreground mt-1">
+              $15,231.89
+            </Text>
+            <Text className="text-xs text-muted-foreground mt-1">
+              +20.1% from last month
+            </Text>
+            <Separator className="my-3" />
+            <Text className="text-xs text-muted-foreground">Subscriptions</Text>
+            <Text className="text-3xl font-bold text-foreground mt-1">
+              +2,350
+            </Text>
+            <Text className="text-xs text-muted-foreground mt-1">
+              +180.1% from last month
+            </Text>
+          </Card>
+
+          {/* Upgrade Subscription */}
+          <Card className="p-4">
+            <Text className="text-lg font-semibold text-card-foreground">
+              Upgrade your Subscription
+            </Text>
+            <Text className="text-sm text-muted-foreground mt-1 text-balance">
+              You are currently on the free plan. Upgrade to the pro plan to
+              get access to all features.
+            </Text>
+            <View className="gap-3 mt-4">
+              <View className="flex-row gap-3">
+                <View className="flex-1">
+                  <Text className="text-sm text-foreground mb-1">Name</Text>
+                  <Input placeholder="Max Leiter" />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-sm text-foreground mb-1">Email</Text>
+                  <Input placeholder="mail@acme.com" />
+                </View>
+              </View>
+              <Text className="text-sm text-foreground">Plan</Text>
+              <View className="flex-row gap-2">
+                <View className="flex-1 border border-border rounded-lg p-3 bg-muted/30">
+                  <Text className="text-sm font-medium text-foreground">
+                    Starter Plan
+                  </Text>
+                  <Text className="text-xs text-muted-foreground">
+                    For small businesses.
+                  </Text>
+                  <Text className="text-lg font-bold text-foreground mt-1">
+                    $10
+                  </Text>
+                </View>
+                <View className="flex-1 border border-border rounded-lg p-3 bg-muted/30">
+                  <Text className="text-sm font-medium text-foreground">
+                    Pro Plan
+                  </Text>
+                  <Text className="text-xs text-muted-foreground">
+                    More features and storage.
+                  </Text>
+                  <Text className="text-lg font-bold text-foreground mt-1">
+                    $20
+                  </Text>
+                </View>
+              </View>
+              <Textarea placeholder="Enter notes" />
+              <View className="gap-2">
+                <View className="flex-row items-center gap-2">
+                  <Checkbox
+                    checked={termsChecked}
+                    onCheckedChange={setTermsChecked}
+                  />
+                  <Text className="text-sm text-foreground">
+                    I agree to the terms and conditions
+                  </Text>
+                </View>
+                <View className="flex-row items-center gap-2">
+                  <Checkbox
+                    checked={newsletterChecked}
+                    onCheckedChange={setNewsletterChecked}
+                  />
+                  <Text className="text-sm text-foreground">
+                    Allow us to send you emails
+                  </Text>
+                </View>
+              </View>
+              <View className="flex-row gap-2">
+                <Button variant="outline" onPress={() => {}} className="flex-1">
+                  <Text className="text-sm text-foreground">Cancel</Text>
+                </Button>
+                <Button onPress={() => {}} className="flex-1">
+                  <Text className="text-sm font-medium text-primary-foreground">
+                    Upgrade Plan
+                  </Text>
+                </Button>
+              </View>
+            </View>
+          </Card>
+
+          {/* Tabs + Settings */}
+          <Card className="p-4">
+            <Text className="text-lg font-semibold text-card-foreground mb-3">
+              Settings
+            </Text>
+            <Tabs
+              value={tabValue}
+              onValueChange={setTabValue}
+              options={[
+                { label: "Account", value: "tab1" },
+                { label: "Password", value: "tab2" },
+              ]}
+            />
+            {tabValue === "tab1" ? (
+              <View className="gap-3 mt-3">
+                <View className="flex-row items-center justify-between">
+                  <Text className="text-sm text-foreground">
+                    Email notifications
+                  </Text>
+                  <Switch
+                    checked={switchChecked}
+                    onCheckedChange={setSwitchChecked}
+                  />
+                </View>
+                <View className="flex-row items-center justify-between">
+                  <Text className="text-sm text-foreground">Dark mode</Text>
+                  <Switch checked={true} onCheckedChange={() => {}} />
+                </View>
+                <View className="flex-row items-center justify-between">
+                  <Text className="text-sm text-foreground">Public profile</Text>
+                  <Switch checked={false} onCheckedChange={() => {}} />
+                </View>
+              </View>
+            ) : (
+              <View className="gap-3 mt-3">
+                <Text className="text-sm text-foreground mb-1">
+                  Current password
+                </Text>
+                <Input placeholder="••••••••" />
+                <Text className="text-sm text-foreground mb-1">
+                  New password
+                </Text>
+                <Input placeholder="Enter new password" />
+                <Button onPress={() => {}}>
+                  <Text className="text-sm font-medium text-primary-foreground">
+                    Update Password
+                  </Text>
+                </Button>
+              </View>
+            )}
+          </Card>
+
+          {/* Activity Goal */}
+          <Card className="p-4">
+            <Text className="text-lg font-semibold text-card-foreground">
+              Move Goal
+            </Text>
+            <Text className="text-sm text-muted-foreground mt-1">
+              Set your daily activity goal.
+            </Text>
+            <View className="items-center justify-center py-4">
+              <Text className="text-4xl font-bold tracking-tighter text-foreground tabular-nums">
+                {goal}
+              </Text>
+              <Text className="text-xs text-muted-foreground uppercase">
+                Calories/day
+              </Text>
+            </View>
+            <View className="flex-row items-center justify-center gap-4 mb-3">
+              <Button
+                variant="outline"
+                onPress={() => setGoal(Math.max(200, goal - 10))}
+                disabled={goal <= 200}
+              >
+                <Text className="text-foreground">−</Text>
+              </Button>
+              <Progress value={(goal / 400) * 100} className="flex-1" />
+              <Button
+                variant="outline"
+                onPress={() => setGoal(Math.min(400, goal + 10))}
+                disabled={goal >= 400}
+              >
+                <Text className="text-foreground">+</Text>
+              </Button>
+            </View>
+            <Button variant="secondary" onPress={() => {}}>
+              <Text className="text-sm font-medium text-secondary-foreground text-center">
+                Set Goal
+              </Text>
+            </Button>
+          </Card>
+
+          {/* Team Members */}
+          <Card className="p-4">
+            <Text className="text-lg font-semibold text-card-foreground mb-3">
+              Team
+            </Text>
+            <View className="gap-3">
+              {[
+                { name: "Olivia Martin", role: "Product Designer", initials: "OM" },
+                { name: "Jackson Lee", role: "Software Engineer", initials: "JL" },
+                { name: "Isabella Nguyen", role: "Data Analyst", initials: "IN" },
+              ].map((member) => (
+                <View
+                  key={member.name}
+                  className="flex-row items-center gap-3"
+                >
+                  <Avatar alt={member.name} size="sm" fallback={member.initials} />
+                  <View className="flex-1">
+                    <Text className="text-sm font-medium text-foreground">
+                      {member.name}
+                    </Text>
+                    <Text className="text-xs text-muted-foreground">
+                      {member.role}
+                    </Text>
+                  </View>
+                  <Badge variant="outline">
+                    <Text className="text-xs">Member</Text>
+                  </Badge>
+                </View>
+              ))}
+            </View>
+          </Card>
+
+          {/* Chat Preview */}
+          <Card className="p-4">
+            <View className="flex-row items-center gap-3 mb-3">
+              <Avatar alt="Sofia Davis" size="sm" fallback="SD" />
+              <View>
+                <Text className="text-sm font-medium text-foreground">
+                  Sofia Davis
+                </Text>
+                <Text className="text-xs text-muted-foreground">
+                  m@example.com
+                </Text>
+              </View>
+            </View>
+            <View className="gap-2">
+              <View className="bg-muted self-start max-w-[75%] rounded-lg px-3 py-2">
+                <Text className="text-sm text-foreground">
+                  Hi, how can I help you today?
+                </Text>
+              </View>
+              <View className="bg-primary self-end max-w-[75%] rounded-lg px-3 py-2">
+                <Text className="text-sm text-primary-foreground">
+                  Hey, I&apos;m having trouble with my account.
+                </Text>
+              </View>
+              <View className="bg-muted self-start max-w-[75%] rounded-lg px-3 py-2">
+                <Text className="text-sm text-foreground">
+                  What seems to be the problem?
+                </Text>
+              </View>
+            </View>
+            <View className="flex-row gap-2 mt-3">
+              <Input placeholder="Type your message..." className="flex-1" />
+              <Button onPress={() => {}}>
+                <Text className="text-sm font-medium text-primary-foreground">
+                  Send
+                </Text>
+              </Button>
+            </View>
+          </Card>
+
+          {/* Alerts / Notifications */}
+          <Alert title="Heads up!" variant="default">
+            We just shipped v0.1.0 — check out the new components.
+          </Alert>
+
+          {/* More primitives showcase */}
+          <Card className="p-4">
+            <Text className="text-lg font-semibold text-card-foreground mb-3">
+              More Primitives
+            </Text>
+            <View className="flex-row flex-wrap gap-2 mb-3">
+              <Badge>Badge</Badge>
+              <Badge variant="secondary">Badge</Badge>
+              <Badge variant="outline">Badge</Badge>
+              <Badge variant="destructive">Badge</Badge>
+            </View>
+            <View className="flex-row gap-2 mb-3">
+              <Toggle
+                pressed={togglePressed}
+                onPressedChange={setTogglePressed}
+                label="Bold"
+              />
               <Toggle pressed={false} onPressedChange={() => {}} label="Italic" />
-            </Demo>
-            <Demo label="Toggle Group">
-              <ToggleGroup>
-                <Toggle pressed={false} onPressedChange={() => {}} label="B" />
-                <Toggle pressed={false} onPressedChange={() => {}} label="I" />
-                <Toggle pressed={false} onPressedChange={() => {}} label="U" />
-              </ToggleGroup>
-            </Demo>
-            <Demo label="Menubar">
-              <Menubar items={[{ label: "File", onPress: () => {} }, { label: "Edit", onPress: () => {} }, { label: "View", onPress: () => {} }]} />
-            </Demo>
-          </Section>
-
-          <Section title="Form Controls">
-            <Demo label="Input">
-              <Input placeholder="Enter text..." className="w-60" />
-            </Demo>
-            <Demo label="Textarea">
-              <Textarea placeholder="Write something..." className="w-60" />
-            </Demo>
-            <Demo label="Select">
-              <View className="w-44">
-                <Select value={selectValue} onValueChange={setSelectValue} options={[{ label: "Apple", value: "apple" }, { label: "Banana", value: "banana" }]} />
-              </View>
-            </Demo>
-            <Demo label="Field / Form">
-              <Form className="w-full max-w-xs">
-                <Field label="Name" required><Input placeholder="Full name" /></Field>
-                <Field label="Bio"><Textarea placeholder="Tell us about yourself" /></Field>
-              </Form>
-            </Demo>
-            <Demo label="Input OTP">
-              <InputOtp value={otpValue} onValueChange={setOtpValue} length={4} />
-            </Demo>
-          </Section>
-
-          <Section title="Selection Controls">
-            <Demo label="Switch">
-              <Switch checked={switchChecked} onCheckedChange={setSwitchChecked} />
-              <Switch checked={true} onCheckedChange={() => {}} />
-            </Demo>
-            <Demo label="Checkbox">
-              <Checkbox checked={checkboxChecked} onCheckedChange={setCheckboxChecked} label="Accept terms" />
-              <Checkbox checked={true} onCheckedChange={() => {}} label="Remember me" />
-            </Demo>
-            <Demo label="Radio Group">
-              <RadioGroup value={radioValue} onValueChange={setRadioValue} options={[{ label: "Option 1", value: "1" }, { label: "Option 2", value: "2" }]} />
-            </Demo>
-            <Demo label="Tabs">
-              <Tabs value={tabValue} onValueChange={setTabValue} options={[{ label: "Tab 1", value: "tab1" }, { label: "Tab 2", value: "tab2" }]} />
-            </Demo>
-          </Section>
-
-          <Section title="Status & Feedback">
-            <Demo label="Badge">
-              <Badge>Default</Badge>
-              <Badge variant="secondary">Secondary</Badge>
-              <Badge variant="destructive">Danger</Badge>
-              <Badge variant="outline">Outline</Badge>
-            </Demo>
-            <Demo label="Alert">
-              <Alert title="Heads up">Default alert message</Alert>
-              <Alert variant="destructive" title="Error">Something went wrong</Alert>
-            </Demo>
-            <Demo label="Progress">
-              <Progress value={65} className="w-60" />
-            </Demo>
-            <Demo label="Spinner">
-              <Spinner />
-              <Spinner label="Loading..." />
-            </Demo>
-            <Demo label="Skeleton">
-              <View className="gap-2 w-40">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
-              </View>
-            </Demo>
-            <Demo label="Sonner">
-              <Button onPress={() => setSonnerVisible(true)}><Text className="text-sm font-medium text-primary-foreground">Show Toast</Text></Button>
-              {sonnerVisible ? <Sonner message="Saved!" variant="success" duration={2000} onDismiss={() => setSonnerVisible(false)} /> : null}
-            </Demo>
-          </Section>
-
-          <Section title="Data Display">
-            <Demo label="Card">
-              <Card className="p-4 w-full max-w-xs">
-                <Text className="text-sm font-semibold text-card-foreground">Card Title</Text>
-                <Text className="text-sm text-muted-foreground mt-1">Card content goes here</Text>
-              </Card>
-            </Demo>
-            <Demo label="Avatar">
-              <Avatar alt="John Doe" />
-              <Avatar alt="Jane Smith" size="lg" />
-              <Avatar alt="User" size="sm" fallback="U" />
-            </Demo>
-            <Demo label="Table">
-              <Table>
-                <TableHeader>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Role</TableHead>
-                </TableHeader>
-                <TableRow>
-                  <TableCell>Alice</TableCell>
-                  <TableCell>Admin</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Bob</TableCell>
-                  <TableCell>User</TableCell>
-                </TableRow>
-              </Table>
-            </Demo>
-            <Demo label="Item / Breadcrumb">
-              <Item label="Email" value="user@example.com" />
-              <Breadcrumb items={[{ label: "Home" }, { label: "Settings" }]} />
-            </Demo>
-            <Demo label="Calendar">
-              <Calendar selected={date} onSelect={setDate} />
-            </Demo>
-            <Demo label="Carousel">
-              <Carousel data={["Slide 1", "Slide 2", "Slide 3"]} renderItem={(item) => (
-                <View className="h-24 bg-muted rounded-lg items-center justify-center mx-1">
-                  <Text className="text-sm text-muted-foreground">{item}</Text>
-                </View>
-              )} />
-            </Demo>
-            <Demo label="Command (searchable list)">
-              <Command items={[{ name: "Settings" }, { name: "Profile" }, { name: "Help" }]} filterKey="name" onSelect={() => {}} renderItem={(item) => <Text className="text-sm text-card-foreground">{item.name}</Text>} />
-            </Demo>
-          </Section>
-
-          <Section title="Overlays">
-            <Demo label="Dialog">
-              <Button onPress={() => setDialogOpen(true)}><Text className="text-sm font-medium text-primary-foreground">Open Dialog</Text></Button>
-              <Dialog open={dialogOpen} onOpenChange={setDialogOpen} title="Confirm" description="This action cannot be undone.">
-                <DialogFooter>
-                  <DialogClose onPress={() => setDialogOpen(false)} />
-                  <Button onPress={() => setDialogOpen(false)}><Text className="text-sm font-medium text-primary-foreground">Continue</Text></Button>
-                </DialogFooter>
-              </Dialog>
-            </Demo>
-            <Demo label="Alert Dialog">
-              <Button variant="destructive" onPress={() => setAlertDialogOpen(true)}><Text className="text-sm font-medium text-destructive-foreground">Delete</Text></Button>
-              <AlertDialog open={alertDialogOpen} onOpenChange={setAlertDialogOpen} title="Delete?" description="This is permanent." variant="destructive" />
-            </Demo>
-            <Demo label="Drawer">
-              <Button onPress={() => setDrawerOpen(true)}><Text className="text-sm font-medium text-primary-foreground">Open Drawer</Text></Button>
-              <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} title="Options">
-                <DrawerFooter>
-                  <Button variant="outline" onPress={() => setDrawerOpen(false)}><Text className="text-sm text-foreground">Cancel</Text></Button>
-                  <Button onPress={() => setDrawerOpen(false)}><Text className="text-sm font-medium text-primary-foreground">Save</Text></Button>
-                </DrawerFooter>
-              </Drawer>
-            </Demo>
-            <Demo label="Sheet">
-              <Button onPress={() => setSheetOpen(true)}><Text className="text-sm font-medium text-primary-foreground">Open Sheet</Text></Button>
-              <Sheet open={sheetOpen} onOpenChange={setSheetOpen} title="Filters">
-                <Text className="text-sm text-card-foreground">Sheet content</Text>
-              </Sheet>
-            </Demo>
-            <Demo label="Popover / Dropdown / Context Menu">
-              <Popover trigger={<Button variant="outline" onPress={() => {}}><Text className="text-sm text-foreground">Popover</Text></Button>}>
-                <Text className="text-sm text-card-foreground">Popover content</Text>
-              </Popover>
-              <DropdownMenu trigger={<Button variant="outline" onPress={() => {}}><Text className="text-sm text-foreground">Menu</Text></Button>} items={[{ label: "Edit", value: "edit" }, { label: "Delete", value: "delete", destructive: true }]} onSelect={() => {}} />
-              <ContextMenu actions={[{ label: "Edit", onPress: () => {} }, { label: "Delete", destructive: true, onPress: () => {} }]}>
-                <View className="rounded-md border border-border bg-card p-3">
-                  <Text className="text-sm text-card-foreground">Long-press me</Text>
-                </View>
-              </ContextMenu>
-            </Demo>
-            <Demo label="Tooltip">
-              <Tooltip content="Helpful info">
-                <Text className="text-sm text-foreground border-b border-dashed">Tap for info</Text>
+              <Toggle pressed={false} onPressedChange={() => {}} label="Underline" />
+            </View>
+            <View className="flex-row gap-2">
+              <Tooltip content="Edit your profile">
+                <Button variant="outline" onPress={() => {}}>
+                  <Text className="text-sm text-foreground">Hover me</Text>
+                </Button>
               </Tooltip>
-            </Demo>
-          </Section>
+              <Button onPress={() => setDialogOpen(true)}>
+                <Text className="text-sm font-medium text-primary-foreground">
+                  Open Dialog
+                </Text>
+              </Button>
+            </View>
+            <Dialog
+              open={dialogOpen}
+              onOpenChange={setDialogOpen}
+              title="Confirm"
+              description="This action cannot be undone."
+            >
+              <DialogFooter>
+                <DialogClose onPress={() => setDialogOpen(false)} />
+                <Button onPress={() => setDialogOpen(false)}>
+                  <Text className="text-sm font-medium text-primary-foreground">
+                    Continue
+                  </Text>
+                </Button>
+              </DialogFooter>
+            </Dialog>
+          </Card>
 
-          <Section title="Navigation & Layout">
-            <Demo label="Pagination">
-              <Pagination currentPage={currentPage} totalPages={5} onPageChange={setCurrentPage} />
-            </Demo>
-            <Demo label="Navigation Menu">
-              <NavigationMenu items={[{ label: "Dashboard", onPress: () => {}, badge: 3 }, { label: "Orders", onPress: () => {} }]} />
-            </Demo>
-            <Demo label="Sidebar">
-              <Sidebar items={[{ label: "Dashboard", icon: "📊", onPress: () => {}, active: true }, { label: "Orders", icon: "📦", onPress: () => {}, badge: "12" }]} />
-            </Demo>
-            <Demo label="Accordion">
-              <Accordion>
-                <AccordionItem title="What is this?">
-                  <Text className="text-sm text-card-foreground">A shadcn/ui component library for React Native.</Text>
-                </AccordionItem>
-                <AccordionItem title="How to install?">
-                  <Text className="text-sm text-card-foreground">npm install @native-cn/primitives</Text>
-                </AccordionItem>
-              </Accordion>
-            </Demo>
-            <Demo label="Scroll Area / Resizable">
-              <ScrollArea className="h-20">
-                <View className="p-2"><Text className="text-sm text-foreground">Scrollable content</Text></View>
-              </ScrollArea>
-              <Resizable direction="horizontal">
-                <View className="flex-1 bg-muted p-3 rounded-l-md"><Text className="text-xs text-muted-foreground">Left</Text></View>
-                <View className="flex-1 bg-muted/50 p-3 rounded-r-md"><Text className="text-xs text-muted-foreground">Right</Text></View>
-              </Resizable>
-            </Demo>
-            <Demo label="Aspect Ratio / Empty / Kbd">
-              <View className="w-16"><AspectRatio ratio={1}><View className="flex-1 bg-muted rounded-md" /></AspectRatio></View>
-              <Empty title="No results" description="Try again" />
-              <Kbd>⌘K</Kbd>
-            </Demo>
-          </Section>
-
-          <Text className="text-center text-xs text-muted-foreground mt-8">
-            54 components from @native-cn/primitives
-          </Text>
+          {/* All components count */}
+          <View className="items-center py-2">
+            <Text className="text-center text-xs text-muted-foreground">
+              54 components from @native-cn/primitives
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
