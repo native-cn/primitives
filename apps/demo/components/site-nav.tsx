@@ -1,146 +1,196 @@
 import { useState } from "react"
-import { View, Text, Pressable, ScrollView } from "react-native"
-import { Link, usePathname } from "expo-router"
-import { cn, useTheme, Button } from "@native-cn/primitives"
+import { View, Text, Pressable } from "react-native"
+import { Link, usePathname, useRouter } from "expo-router"
+import { cn, useTheme } from "@native-cn/primitives"
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "Docs", href: "/docs" },
   { label: "Components", href: "/docs/components" },
+  { label: "Blocks", href: "/blocks" },
   { label: "Charts", href: "/charts" },
   { label: "Colors", href: "/colors" },
   { label: "Examples", href: "/examples" },
-  { label: "Create", href: "/create" },
 ]
 
-export function SiteHeader() {
+/* -------- Desktop nav (hidden on mobile) -------- */
+
+function MainNav({ className }: { className?: string }) {
   const pathname = usePathname()
-  const [menuOpen, setMenuOpen] = useState(false)
+  return (
+    <View className={cn("flex-row items-center gap-0", className)}>
+      {NAV_ITEMS.map((item) => {
+        const active = pathname === item.href
+        return (
+          <Link key={item.href} href={item.href as any} asChild>
+            <Pressable
+              data-active={active}
+              className="px-2.5 py-1.5"
+            >
+              <Text
+                className={cn(
+                  "text-sm",
+                  active ? "text-foreground font-medium" : "text-muted-foreground"
+                )}
+              >
+                {item.label}
+              </Text>
+            </Pressable>
+          </Link>
+        )
+      })}
+    </View>
+  )
+}
+
+/* -------- Mobile nav (hidden on desktop) -------- */
+
+function MobileNav({ className }: { className?: string }) {
+  const [open, setOpen] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
+
+  return (
+    <View className={cn("relative", className)}>
+      <Pressable
+        onPress={() => setOpen(!open)}
+        className="flex-row items-center gap-2.5 h-8 active:opacity-70"
+      >
+        <View className="relative size-4">
+          <View
+            className={cn(
+              "absolute left-0 h-0.5 w-4 bg-foreground transition-all duration-100",
+              open ? "top-[0.35rem] -rotate-45" : "top-1"
+            )}
+          />
+          <View
+            className={cn(
+              "absolute left-0 h-0.5 w-4 bg-foreground transition-all duration-100",
+              open ? "top-[0.35rem] rotate-45" : "top-2.5"
+            )}
+          />
+        </View>
+        <Text className="text-lg leading-none font-medium text-foreground">Menu</Text>
+      </Pressable>
+
+      {/* Backdrop overlay */}
+      {open && (
+        <>
+          <Pressable
+            onPress={() => setOpen(false)}
+            className="fixed inset-0 z-40 bg-background/80"
+          />
+          <View className="fixed left-0 right-0 top-12 bottom-0 z-50 overflow-y-auto bg-background px-6 py-6">
+            <View className="gap-4">
+              <Text className="text-sm font-medium text-muted-foreground">Menu</Text>
+              <View className="gap-3">
+                {NAV_ITEMS.map((item) => {
+                  const active = pathname === item.href
+                  return (
+                    <Pressable
+                      key={item.href}
+                      onPress={() => { router.push(item.href as any); setOpen(false) }}
+                    >
+                      <Text
+                        className={cn(
+                          "text-2xl font-medium",
+                          active ? "text-foreground" : "text-muted-foreground"
+                        )}
+                      >
+                        {item.label}
+                      </Text>
+                    </Pressable>
+                  )
+                })}
+              </View>
+            </View>
+
+            <View className="h-px bg-border my-8" />
+
+            <View className="gap-4">
+              <Text className="text-sm font-medium text-muted-foreground">Docs</Text>
+              <View className="gap-3">
+                {[
+                  { name: "Getting Started", href: "/docs/getting-started" },
+                  { name: "Components", href: "/docs/components" },
+                  { name: "Theming", href: "/docs/theming" },
+                  { name: "CLI", href: "/docs/cli" },
+                  { name: "Changelog", href: "/docs" },
+                ].map((item) => (
+                  <Pressable
+                    key={item.href}
+                    onPress={() => { router.push(item.href as any); setOpen(false) }}
+                  >
+                    <Text className="text-2xl font-medium text-foreground">
+                      {item.name}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
+          </View>
+        </>
+      )}
+    </View>
+  )
+}
+
+/* -------- Site Header -------- */
+
+export function SiteHeader() {
   const { colorScheme, toggleColorScheme } = useTheme()
 
   return (
-    <View className="border-b border-border bg-background/95 backdrop-blur-sm">
-      <View className="flex-row items-center justify-between h-14 px-4 max-w-6xl mx-auto w-full">
-        {/* Logo */}
-        <Link href="/" asChild>
-          <Pressable className="flex-row items-center gap-2">
-            <View className="size-7 rounded-md bg-primary items-center justify-center">
-              <Text className="text-primary-foreground font-bold text-xs">nc</Text>
-            </View>
-            <Text className="font-semibold text-foreground text-base hidden sm:flex">
-              native-cn
-            </Text>
-          </Pressable>
-        </Link>
-
-        {/* Desktop nav */}
-        <View className="hidden md:flex-row items-center gap-1">
-          {NAV_ITEMS.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(item.href + "/")
-            return (
-              <Link key={item.href} href={item.href as any} asChild>
-                <Pressable
-                  className={cn(
-                    "px-3 py-1.5 rounded-md text-sm",
-                    active ? "bg-muted text-foreground font-medium" : "text-muted-foreground"
-                  )}
-                >
-                  <Text className={active ? "text-foreground font-medium" : "text-muted-foreground"}>
-                    {item.label}
-                  </Text>
-                </Pressable>
-              </Link>
-            )
-          })}
-        </View>
-
-        {/* Right side */}
-        <View className="flex-row items-center gap-2">
-          {/* Theme toggle — desktop */}
+    <View className="sticky top-0 z-50 bg-background border-b border-border">
+      <View className="flex-row items-center h-12 px-4 xl:px-6">
+        <MobileNav className="flex lg:hidden mr-3" />
+        <MainNav className="hidden lg:flex" />
+        <View className="ml-auto flex-row items-center gap-2">
+          {/* Theme toggle */}
+          <View className="w-px h-4 bg-border mx-1" />
           <Pressable
             onPress={toggleColorScheme}
-            className="hidden md:flex size-8 items-center justify-center rounded-md border border-border active:bg-muted"
-            aria-label="Toggle color scheme"
+            className="size-8 items-center justify-center active:opacity-70"
+            aria-label={colorScheme === "dark" ? "Switch to light" : "Switch to dark"}
           >
             <Text className="text-sm text-foreground">
               {colorScheme === "dark" ? "☀️" : "🌙"}
             </Text>
           </Pressable>
 
-          {/* Mobile hamburger */}
-          <Pressable
-            onPress={() => setMenuOpen(!menuOpen)}
-            className="md:hidden size-8 items-center justify-center rounded-md border border-border active:bg-muted"
-            aria-label="Toggle menu"
-          >
-            <Text className="text-lg text-foreground">{menuOpen ? "✕" : "☰"}</Text>
-          </Pressable>
+          {/* New button */}
+          <View className="w-px h-4 bg-border mx-1" />
+          <Link href="/create" asChild>
+            <Pressable className="h-[31px] px-3 rounded-lg bg-primary items-center justify-center flex-row gap-1.5 active:opacity-80">
+              <Text className="text-primary-foreground text-sm font-medium">+ New</Text>
+            </Pressable>
+          </Link>
         </View>
       </View>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <View className="md:hidden border-t border-border p-4 gap-1">
-          {NAV_ITEMS.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(item.href + "/")
-            return (
-              <Link key={item.href} href={item.href as any} asChild>
-                <Pressable
-                  onPress={() => setMenuOpen(false)}
-                  className={cn(
-                    "px-3 py-2 rounded-md",
-                    active ? "bg-muted" : "active:bg-muted/50"
-                  )}
-                >
-                  <Text className={active ? "text-foreground font-medium" : "text-muted-foreground"}>
-                    {item.label}
-                  </Text>
-                </Pressable>
-              </Link>
-            )
-          })}
-          <View className="flex-row items-center justify-between mt-2 pt-2 border-t border-border">
-            <Text className="text-sm text-muted-foreground">
-              {colorScheme === "dark" ? "Dark mode" : "Light mode"}
-            </Text>
-            <Button variant="outline" size="sm" onPress={toggleColorScheme}>
-              <Text className="text-xs text-foreground">Toggle</Text>
-            </Button>
-          </View>
-        </View>
-      )}
     </View>
   )
 }
 
+/* -------- Site Footer (minimal — matches shadcn one-liner) -------- */
+
 export function SiteFooter() {
   return (
-    <View className="border-t border-border bg-background">
-      <View className="max-w-6xl mx-auto w-full px-4 py-8 flex-row flex-wrap gap-8">
-        <View className="flex-1 min-w-[200px] gap-2">
-          <Text className="font-semibold text-foreground text-sm">native-cn</Text>
-          <Text className="text-xs text-muted-foreground">
-            shadcn/ui primitives for React Native.
+    <View className="border-t border-border">
+      <View className="h-14 items-center justify-center px-4 xl:px-6">
+        <Text className="text-xs sm:text-sm text-center text-muted-foreground leading-loose">
+          Built by{" "}
+          <Text className="font-medium underline underline-offset-4 text-foreground">
+            native-cn
+          </Text>{" "}
+          at{" "}
+          <Text className="font-medium underline underline-offset-4 text-foreground">
+            nativecn.com
           </Text>
-        </View>
-        <View className="gap-2">
-          <Text className="text-xs font-medium text-foreground uppercase tracking-wider">Docs</Text>
-          <Link href="/docs/getting-started"><Text className="text-xs text-muted-foreground">Getting Started</Text></Link>
-          <Link href="/docs/components"><Text className="text-xs text-muted-foreground">Components</Text></Link>
-          <Link href="/docs/cli"><Text className="text-xs text-muted-foreground">CLI</Text></Link>
-          <Link href="/docs/theming"><Text className="text-xs text-muted-foreground">Theming</Text></Link>
-        </View>
-        <View className="gap-2">
-          <Text className="text-xs font-medium text-foreground uppercase tracking-wider">More</Text>
-          <Link href="/charts"><Text className="text-xs text-muted-foreground">Charts</Text></Link>
-          <Link href="/colors"><Text className="text-xs text-muted-foreground">Colors</Text></Link>
-          <Link href="/examples"><Text className="text-xs text-muted-foreground">Examples</Text></Link>
-          <Link href="/create"><Text className="text-xs text-muted-foreground">Create</Text></Link>
-        </View>
-      </View>
-      <View className="border-t border-border py-4">
-        <Text className="text-xs text-muted-foreground text-center">
-          MIT License — {new Date().getFullYear()}
+          . The source code is available on{" "}
+          <Text className="font-medium underline underline-offset-4 text-foreground">
+            GitHub
+          </Text>
+          .
         </Text>
       </View>
     </View>

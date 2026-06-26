@@ -20,9 +20,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider defaultTheme="neutral">
       <ThemedStatusBar />
-      <View className="flex-1 bg-background">
+      <View className="group/layout min-h-svh flex-1 flex-col bg-background">
         <SiteHeader />
-        <View className="flex-1">
+        <View className="flex min-h-0 flex-1 flex-col">
           <Stack screenOptions={{ headerShown: false }} />
         </View>
         <SiteFooter />

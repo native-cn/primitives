@@ -10,7 +10,8 @@ interface ComboboxOption {
 interface ComboboxProps {
   value: string
   onValueChange: (value: string) => void
-  options: ComboboxOption[]
+  options?: ComboboxOption[]
+  items?: ComboboxOption[]
   placeholder?: string
   searchPlaceholder?: string
   emptyMessage?: string
@@ -20,20 +21,22 @@ export function Combobox({
   value,
   onValueChange,
   options,
+  items,
   placeholder = "Select...",
   searchPlaceholder = "Search...",
   emptyMessage = "No results found.",
 }: ComboboxProps) {
+  const resolvedOptions = options ?? items ?? []
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
-  const selected = options.find((o) => o.value === value)
+  const selected = resolvedOptions.find((o) => o.value === value)
 
   const filtered = useMemo(
     () =>
-      options.filter((o) =>
+      resolvedOptions.filter((o) =>
         o.label.toLowerCase().includes(query.toLowerCase())
       ),
-    [options, query]
+    [resolvedOptions, query]
   )
 
   return (

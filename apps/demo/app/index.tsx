@@ -288,9 +288,9 @@ function NewMilestone() {
       </CardHeader>
       <CardContent className="px-4 gap-3">
         <Input placeholder="Goal Name" defaultValue="e.g. New Car" />
-        <View className="flex-row gap-3">
-          <Input placeholder="Target Amount" className="flex-1" defaultValue="$15,000" />
-          <Input placeholder="Target Date" className="flex-1" defaultValue="Dec 2025" />
+        <View className="flex-row flex-wrap gap-3">
+          <Input placeholder="Target Amount" className="min-w-[140px] flex-1" defaultValue="$15,000" />
+          <Input placeholder="Target Date" className="min-w-[140px] flex-1" defaultValue="Dec 2025" />
         </View>
       </CardContent>
     </Card>
