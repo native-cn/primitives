@@ -340,6 +340,13 @@
       "files": [{ "path": "ui/carousel.tsx", "type": "registry:ui" }]
     },
     {
+      "name": "chart",
+      "type": "registry:ui",
+      "dependencies": ["react-native-svg"],
+      "registryDependencies": [],
+      "files": [{ "path": "ui/chart.tsx", "type": "registry:ui" }]
+    },
+    {
       "name": "accordion",
       "type": "registry:ui",
       "dependencies": [],

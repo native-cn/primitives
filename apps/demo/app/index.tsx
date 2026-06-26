@@ -20,6 +20,11 @@ import {
   Toggle,
   Tooltip,
   Combobox,
+  ChartContainer,
+  BarChart,
+  LineChart,
+  PieChart,
+  ChartLegend,
   ThemeProvider,
   useTheme,
   themes,
@@ -413,6 +418,60 @@ export default function HomeScreen() {
                 </Button>
               </DialogFooter>
             </Dialog>
+          </Card>
+
+          {/* Charts */}
+          <Card className="p-4">
+            <Text className="text-lg font-semibold text-card-foreground mb-3">
+              Charts
+            </Text>
+            {(() => {
+              const chartData = [
+                { month: "Jan", revenue: 400, expenses: 240 },
+                { month: "Feb", revenue: 300, expenses: 139 },
+                { month: "Mar", revenue: 500, expenses: 380 },
+                { month: "Apr", revenue: 280, expenses: 190 },
+                { month: "May", revenue: 590, expenses: 430 },
+                { month: "Jun", revenue: 490, expenses: 340 },
+              ]
+              const pieData = [
+                { name: "Products", value: 45 },
+                { name: "Services", value: 30 },
+                { name: "Licenses", value: 15 },
+                { name: "Support", value: 10 },
+              ]
+              const chartConfig = {
+                revenue: { label: "Revenue", color: "hsl(221.2 83.2% 53.3%)" },
+                expenses: { label: "Expenses", color: "hsl(0 84.2% 60.2%)" },
+              }
+              const pieConfig = {
+                products: { label: "Products", color: "#3b82f6" },
+                services: { label: "Services", color: "#22c55e" },
+                licenses: { label: "Licenses", color: "#f59e0b" },
+                support: { label: "Support", color: "#8b5cf6" },
+              }
+
+              return (
+                <>
+                  <ChartContainer config={chartConfig}>
+                    <Text className="text-xs text-muted-foreground mb-1">Bar Chart</Text>
+                    <BarChart data={chartData} config={chartConfig} xKey="month" yKey="revenue" height={160} />
+                    <ChartLegend config={chartConfig} />
+                  </ChartContainer>
+                  <View className="h-4" />
+                  <ChartContainer config={chartConfig}>
+                    <Text className="text-xs text-muted-foreground mb-1">Line Chart</Text>
+                    <LineChart data={chartData} config={chartConfig} xKey="month" yKey="expenses" height={160} />
+                  </ChartContainer>
+                  <View className="h-4" />
+                  <ChartContainer config={pieConfig}>
+                    <Text className="text-xs text-muted-foreground mb-1">Pie Chart</Text>
+                    <PieChart data={pieData} config={pieConfig} nameKey="name" valueKey="value" size={180} innerRadius={40} />
+                    <ChartLegend config={pieConfig} />
+                  </ChartContainer>
+                </>
+              )
+            })()}
           </Card>
 
           {/* Combobox */}

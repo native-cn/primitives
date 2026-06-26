@@ -7,7 +7,7 @@ const expectedExports = [
   "cn", "useToast", "useMobile", "useDirection", "DirectionProvider",
   "Accordion", "AccordionItem", "Alert", "AlertDialog",
   "AspectRatio", "Avatar", "Badge", "Breadcrumb", "Button", "ButtonGroup",
-  "Calendar", "Card", "Carousel", "Checkbox", "Collapsible", "Combobox",
+  "Calendar", "Card", "Carousel", "ChartContainer", "BarChart", "LineChart", "PieChart", "ChartLegend", "Checkbox", "Collapsible", "Combobox",
   "Command", "ContextMenu", "Dialog", "DialogClose", "DialogFooter",
   "Drawer", "DrawerFooter", "DropdownMenu", "Empty", "Field", "FieldGroup",
   "Form", "HoverCard", "Input", "InputGroup", "InputOtp", "Item", "Kbd",
